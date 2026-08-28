@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Checkpoints and logs
+checkpoints/
+*.pth
+*.pt
+results/
+wandb/
+*.log
+
+# Datasets
+datasets/
+*.zip
+*.tar.gz
+*.tar
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

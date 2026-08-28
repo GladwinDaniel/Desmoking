@@ -1,0 +1,9 @@
+torch>=1.10.0
+torchvision
+timm
+einops
+scikit-image
+Pillow
+numpy
+dominate
+wandb
