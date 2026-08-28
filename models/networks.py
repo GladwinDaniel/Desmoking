@@ -5,7 +5,10 @@ import functools
 from torch.optim import lr_scheduler
 
 import torch.utils.checkpoint as checkpoint
-from timm.models.layers import DropPath, to_2tuple, trunc_normal_
+try:
+    from timm.layers import DropPath, to_2tuple, trunc_normal_
+except ImportError:
+    from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import torch.nn.functional as F
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
@@ -15,7 +18,13 @@ import time
 from torch import einsum
 from models.pfan import PFAN,ViTs
 from models.mamba_pfan import MambaPFAN
-from timm.models.registry import register_model
+try:
+    from timm.models import register_model
+except (ImportError, AttributeError):
+    try:
+        from timm.models.registry import register_model
+    except ImportError:
+        register_model = None
 from .utils import LayerNorm, GRN
 ###############################################################################
 # Helper Functions

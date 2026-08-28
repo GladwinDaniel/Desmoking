@@ -22,49 +22,95 @@ try:
 except Exception:
     pass
 
-# If no CLI arguments provided, apply intelligent defaults based on environment
-if len(sys.argv) <= 1:
-    is_kaggle = os.path.exists('/kaggle')
-    is_colab = os.path.exists('/content')
 
-    if is_kaggle:
-        dataroot = '/kaggle/input/desmoking-dataset/composite' if os.path.exists('/kaggle/input/desmoking-dataset/composite') else './datasets/composite'
-        checkpoints_dir = '/kaggle/working/checkpoints'
-        num_threads = '4'
-        batch_size = '8'
-    elif is_colab:
-        dataroot = '/content/datasets/composite' if os.path.exists('/content/datasets/composite') else './datasets/composite'
-        checkpoints_dir = '/content/checkpoints'
-        num_threads = '2'
-        batch_size = '8'
-    else:
-        dataroot = './datasets/composite'
-        checkpoints_dir = './checkpoints'
-        num_threads = '0'
-        batch_size = '4'
+def set_default_arg(flag, value):
+    """Ensure essential flags are present in sys.argv unless explicitly overridden."""
+    if flag not in sys.argv:
+        sys.argv.extend([flag, str(value)])
 
-    sys.argv = [
-        'train.py',
-        '--dataroot', dataroot,
-        '--name', 'mamba_Final',
-        '--model', 'pix2pix',
-        '--netG', 'mamba_pfan',
-        '--netD', 'basic',
-        '--direction', 'AtoB',
-        '--dataset_mode', 'aligned',
-        '--norm', 'batch',
-        '--checkpoints_dir', checkpoints_dir,
-        '--embed_dim', '64',
-        '--ndf', '64',
-        '--ngf', '64',
-        '--gpu_ids', '0',
-        '--batch_size', batch_size,
-        '--display_id', '-1',
-        '--num_threads', num_threads,
-        '--n_epochs', '30',
-        '--n_epochs_decay', '0',
-        '--print_freq', '20'
+
+def resolve_dataroot(provided_root):
+    """Locate the exact directory containing the 'train' folder across local and cloud environments."""
+    if provided_root and os.path.isdir(os.path.join(provided_root, 'train')):
+        return os.path.abspath(provided_root)
+
+    # Search subdirectories of provided root
+    if provided_root and os.path.isdir(provided_root):
+        for root, dirs, _ in os.walk(provided_root):
+            if 'train' in dirs:
+                print(f"[Dataset Auto-Detect] Found dataset at: {root}", flush=True)
+                return os.path.abspath(root)
+
+    # Search /kaggle/input if on Kaggle
+    if os.path.exists('/kaggle/input'):
+        for root, dirs, _ in os.walk('/kaggle/input'):
+            if 'train' in dirs:
+                print(f"[Dataset Auto-Detect] Found dataset at: {root}", flush=True)
+                return os.path.abspath(root)
+
+    # Search /content if on Google Colab
+    if os.path.exists('/content'):
+        for root, dirs, _ in os.walk('/content'):
+            if 'train' in dirs and 'checkpoints' not in root:
+                print(f"[Dataset Auto-Detect] Found dataset at: {root}", flush=True)
+                return os.path.abspath(root)
+
+    # Search common local paths
+    local_candidates = [
+        './datasets/composite',
+        './datasets',
+        '../datasets/composite',
+        '../project_files/datasets/composite',
+        'D:/Projects/DeSmoking/project_files/datasets/composite'
     ]
+    for cand in local_candidates:
+        if os.path.isdir(os.path.join(cand, 'train')):
+            print(f"[Dataset Auto-Detect] Found dataset at: {cand}", flush=True)
+            return os.path.abspath(cand)
+
+    return provided_root
+
+
+# 1. Environment-aware defaults
+is_kaggle = os.path.exists('/kaggle')
+is_colab = os.path.exists('/content')
+
+if is_kaggle:
+    default_checkpoints = '/kaggle/working/checkpoints'
+    default_threads = '4'
+    default_batch = '8'
+    default_dataroot = '/kaggle/input'
+elif is_colab:
+    default_checkpoints = '/content/checkpoints'
+    default_threads = '2'
+    default_batch = '8'
+    default_dataroot = '/content/datasets/composite'
+else:
+    default_checkpoints = './checkpoints'
+    default_threads = '0'
+    default_batch = '4'
+    default_dataroot = './datasets/composite'
+
+# 2. Enforce Mamba architecture & headless settings (prevent defaulting to unet_256 or visdom)
+set_default_arg('--model', 'pix2pix')
+set_default_arg('--netG', 'mamba_pfan')
+set_default_arg('--netD', 'basic')
+set_default_arg('--direction', 'AtoB')
+set_default_arg('--dataset_mode', 'aligned')
+set_default_arg('--norm', 'batch')
+set_default_arg('--display_id', '-1')
+set_default_arg('--gpu_ids', '0')
+set_default_arg('--name', 'mamba_Final')
+set_default_arg('--embed_dim', '64')
+set_default_arg('--ndf', '64')
+set_default_arg('--ngf', '64')
+set_default_arg('--batch_size', default_batch)
+set_default_arg('--num_threads', default_threads)
+set_default_arg('--checkpoints_dir', default_checkpoints)
+set_default_arg('--dataroot', default_dataroot)
+set_default_arg('--n_epochs', '30')
+set_default_arg('--n_epochs_decay', '0')
+set_default_arg('--print_freq', '20')
 
 from options.train_options import TrainOptions
 from data import create_dataset
@@ -82,7 +128,23 @@ def main():
     # 1. Parse Training Options
     opt = TrainOptions().parse()
 
-    # 2. Create Train Dataset & Model
+    # 2. Automatically verify / locate dataset containing 'train'
+    resolved_root = resolve_dataroot(opt.dataroot)
+    if not os.path.isdir(os.path.join(resolved_root, 'train')):
+        print("\n" + "!" * 70, flush=True)
+        print(f"ERROR: Could not locate directory containing 'train' folder!", flush=True)
+        print(f"Attempted path: {opt.dataroot}", flush=True)
+        if os.path.exists('/kaggle/input'):
+            print("\nAvailable directories inside /kaggle/input:", flush=True)
+            for r, d, f in os.walk('/kaggle/input'):
+                print(f"  📂 {r}", flush=True)
+        print("!" * 70 + "\n", flush=True)
+        sys.exit(1)
+
+    opt.dataroot = resolved_root
+    print(f"[Verified Dataroot]: {opt.dataroot}", flush=True)
+
+    # 3. Create Train Dataset & Model
     train_dataset = create_dataset(opt)
     dataset_size = len(train_dataset)
     print(f"Training images: {dataset_size}", flush=True)
@@ -93,7 +155,7 @@ def main():
     total_iters = 0
     num_epochs = opt.n_epochs + opt.n_epochs_decay
 
-    # 3. Training Loop
+    # 4. Training Loop
     for epoch in range(opt.epoch_count, num_epochs + 1):
         epoch_start_time = time.time()
         epoch_iter = 0
@@ -124,13 +186,19 @@ def main():
     print("TRAINING FINISHED! RUNNING TEST INFERENCE & VISUAL GENERATION...", flush=True)
     print("=" * 65, flush=True)
 
-    # 4. Run Test Inference and Generate Visual Comparisons
+    # 5. Run Test Inference and Generate Visual Comparisons
     val_opt = copy.deepcopy(opt)
     val_opt.phase = 'test'
     val_opt.isTrain = False
     val_opt.serial_batches = True
     val_opt.no_flip = True
     val_opt.max_dataset_size = 20
+
+    # Ensure test directory exists or fallback to train for visual evaluation
+    if not os.path.isdir(os.path.join(opt.dataroot, 'test')):
+        print(f"[Notice] 'test' folder not found in {opt.dataroot}. Using 'train' images for visual evaluation.", flush=True)
+        val_opt.phase = 'train'
+
     test_dataset = create_dataset(val_opt)
 
     output_dir = os.path.join(opt.checkpoints_dir, opt.name, 'results', 'mamba_Final', 'visual_comparisons')
