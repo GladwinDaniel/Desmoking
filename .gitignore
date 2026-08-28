@@ -3,15 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Checkpoints and logs
-checkpoints/
-*.pth
-*.pt
-results/
+# Temporary logs & wandb
 wandb/
 *.log
 
-# Datasets
+# Datasets (do not commit large datasets)
 datasets/
 *.zip
 *.tar.gz

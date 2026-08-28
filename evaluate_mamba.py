@@ -2,114 +2,162 @@
 Evaluation and Visual Comparison Script for MambaPFAN
 =====================================================
 Loads trained MambaPFAN checkpoint, runs inference on test images,
-computes PSNR / SSIM metrics, and saves side-by-side visual comparisons.
+computes PSNR / SSIM / MSE metrics, and saves side-by-side visual comparisons.
 """
 
 import os
+import sys
 import time
 import math
 import torch
 import numpy as np
 from PIL import Image
-from collections import OrderedDict
+import torchvision.transforms as transforms
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 from skimage.metrics import structural_similarity as compare_ssim
 
-from options.test_options import TestOptions
-from data import create_dataset
-from models import create_model
-from util import util
+# Add project root to sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from models.mamba_pfan import MambaPFAN
+from models.networks import get_norm_layer
 
 
-def evaluate(opt):
-    opt.num_threads = 0
-    opt.batch_size = 1
-    opt.serial_batches = True
-    opt.no_flip = True
-    opt.display_id = -1
+def evaluate(
+    checkpoint_path='./checkpoints/mamba_Final/latest_net_G.pth',
+    test_dir='./datasets/composite/test',
+    output_dir='./results/mamba_eval',
+    image_size=(256, 256),
+    device=None
+):
+    if device is None:
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    print(f"Running evaluation on device: {device}")
 
-    dataset = create_dataset(opt)
-    model = create_model(opt)
-    model.setup(opt)
-    model.eval()
-
-    output_dir = os.path.join(opt.results_dir, opt.name, 'visual_comparisons')
     os.makedirs(output_dir, exist_ok=True)
+
+    # 1. Initialize MambaPFAN Model
+    norm_layer = get_norm_layer(norm_type='batch')
+    netG = MambaPFAN(
+        input_nc=3,
+        output_nc=3,
+        ngf=64,
+        hidden_dim=64,
+        layers=[2, 2, 2],
+        d_state=16,
+        d_conv=4,
+        expand=2,
+        norm_layer_1=norm_layer
+    ).to(device)
+
+    # 2. Load Weights
+    if not os.path.exists(checkpoint_path):
+        raise FileNotFoundError(f"Checkpoint not found at: {checkpoint_path}")
+    weights = torch.load(checkpoint_path, map_location=device)
+    netG.load_state_dict(weights)
+    netG.eval()
+    print(f"Loaded generator checkpoint: {checkpoint_path}")
+
+    # 3. Define Image Transform
+    transform = transforms.Compose([
+        transforms.Resize(image_size),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+
+    # 4. Locate Test Images (Supports paired subfolders 'A' & 'B', or single folder)
+    testA_dir = os.path.join(test_dir, 'A') if os.path.isdir(os.path.join(test_dir, 'A')) else test_dir
+    testB_dir = os.path.join(test_dir, 'B') if os.path.isdir(os.path.join(test_dir, 'B')) else None
+
+    valid_extensions = ('.bmp', '.png', '.jpg', '.jpeg')
+    image_files = sorted([f for f in os.listdir(testA_dir) if f.lower().endswith(valid_extensions)])
+    print(f"Found {len(image_files)} test images in {testA_dir}")
 
     psnr_list, ssim_list, mse_list = [], [], []
 
-    print(f"Running evaluation on {len(dataset)} test samples...")
-
     with torch.no_grad():
-        for i, data in enumerate(dataset):
-            if i >= opt.num_test:
-                break
-            model.set_input(data)
-            model.test()
-            visuals = model.get_current_visuals()
-            img_path = model.get_image_paths()[0]
-            short_name = os.path.splitext(os.path.basename(img_path))[0]
+        for i, fname in enumerate(image_files):
+            pathA = os.path.join(testA_dir, fname)
+            imgA = Image.open(pathA).convert('RGB')
+            tA = transform(imgA).unsqueeze(0).to(device)
 
-            # Convert to numpy uint8
-            if 'fake_B' in visuals and 'real_B' in visuals:
-                real_A = util.tensor2im(visuals['real_A'])
-                fake_B = util.tensor2im(visuals['fake_B'])
-                real_B = util.tensor2im(visuals['real_B'])
-            else:
-                images = [util.tensor2im(v) for v in visuals.values()]
-                real_A = images[0]
-                fake_B = images[1]
-                real_B = images[2] if len(images) > 2 else images[0]
+            fakeB = netG(tA)
 
-            # Metrics
-            psnr_val = compare_psnr(real_B, fake_B, data_range=255)
-            ssim_val = compare_ssim(real_B, fake_B, channel_axis=2, data_range=255)
-            mse_val = np.mean((real_B.astype(np.float64) - fake_B.astype(np.float64)) ** 2)
+            # Convert network output tensor [-1, 1] to uint8 [0, 255]
+            out = fakeB.squeeze(0).cpu().float().numpy()
+            out = (np.transpose(out, (1, 2, 0)) + 1) / 2.0 * 255.0
+            out = np.clip(out, 0, 255).astype(np.uint8)
 
-            psnr_list.append(psnr_val)
-            ssim_list.append(ssim_val)
-            mse_list.append(mse_val)
+            # Save individual de-smoked output
+            short_name = os.path.splitext(fname)[0]
+            desmoked_path = os.path.join(output_dir, f"{short_name}_desmoked.png")
+            Image.fromarray(out).save(desmoked_path)
 
-            # Create side-by-side comparison: [Smoky Input | MambaPFAN Output | Ground Truth Clean]
-            h, w, c = real_A.shape
-            side_by_side = np.zeros((h, w * 3, c), dtype=np.uint8)
-            side_by_side[:, :w, :] = real_A
-            side_by_side[:, w:2*w, :] = fake_B
-            side_by_side[:, 2*w:, :] = real_B
+            # If ground truth B exists, compute metrics and side-by-side comparison
+            has_gt = testB_dir and os.path.exists(os.path.join(testB_dir, fname))
+            if has_gt:
+                imgB = Image.open(os.path.join(testB_dir, fname)).convert('RGB')
+                gt = imgB.resize(image_size, Image.BICUBIC)
+                gt_arr = np.array(gt)
 
-            comp_img = Image.fromarray(side_by_side)
-            comp_path = os.path.join(output_dir, f"{short_name}_comparison.png")
-            comp_img.save(comp_path)
+                in_arr = np.array(imgA.resize(image_size, Image.BICUBIC))
 
-            # Also save individual de-smoked output
-            clean_output_path = os.path.join(output_dir, f"{short_name}_desmoked.png")
-            Image.fromarray(fake_B).save(clean_output_path)
+                mse = np.mean((gt_arr.astype(np.float64) - out.astype(np.float64)) ** 2)
+                psnr = compare_psnr(gt_arr, out, data_range=255)
+                ssim = compare_ssim(gt_arr, out, channel_axis=2, data_range=255)
 
-            if (i + 1) % 10 == 0 or (i + 1) == len(dataset):
-                print(f"[{i+1}/{len(dataset)}] - PSNR: {np.mean(psnr_list):.3f} dB | SSIM: {np.mean(ssim_list):.4f}")
+                psnr_list.append(psnr)
+                ssim_list.append(ssim)
+                mse_list.append(mse)
 
-    avg_psnr = np.mean(psnr_list)
-    avg_ssim = np.mean(ssim_list)
-    avg_mse = np.mean(mse_list)
+                # 3-panel: [ Smoky Input | Mamba De-Smoked | Clean Ground Truth ]
+                h, w, c = in_arr.shape
+                comp = np.zeros((h, w * 3, c), dtype=np.uint8)
+                comp[:, :w, :] = in_arr
+                comp[:, w:2*w, :] = out
+                comp[:, 2*w:, :] = gt_arr
 
-    summary_file = os.path.join(output_dir, 'evaluation_summary.txt')
-    with open(summary_file, 'w') as f:
-        f.write(f"MambaPFAN Test Results\n")
-        f.write(f"======================\n")
-        f.write(f"Number of test images: {len(psnr_list)}\n")
-        f.write(f"Average PSNR: {avg_psnr:.4f} dB\n")
-        f.write(f"Average SSIM: {avg_ssim:.4f}\n")
-        f.write(f"Average MSE:  {avg_mse:.4f}\n")
+                comp_path = os.path.join(output_dir, f"{short_name}_comparison.png")
+                Image.fromarray(comp).save(comp_path)
 
-    print("\n" + "=" * 40)
-    print(f"MAMBA-PFAN EVALUATION COMPLETE")
-    print(f"Average PSNR: {avg_psnr:.4f} dB")
-    print(f"Average SSIM: {avg_ssim:.4f}")
-    print(f"Average MSE:  {avg_mse:.4f}")
-    print(f"Visual outputs saved to: {output_dir}")
-    print("=" * 40)
+            if (i + 1) % 20 == 0 or (i + 1) == len(image_files):
+                if psnr_list:
+                    print(f"[{i+1}/{len(image_files)}] - PSNR: {np.mean(psnr_list):.2f} dB | SSIM: {np.mean(ssim_list):.4f}")
+                else:
+                    print(f"[{i+1}/{len(image_files)}] processed.")
+
+    if psnr_list:
+        avg_psnr = np.mean(psnr_list)
+        avg_ssim = np.mean(ssim_list)
+        avg_mse = np.mean(mse_list)
+
+        summary_file = os.path.join(output_dir, 'evaluation_summary.txt')
+        with open(summary_file, 'w') as f:
+            f.write("MambaPFAN Evaluation Summary\n")
+            f.write("============================\n")
+            f.write(f"Number of test images: {len(psnr_list)}\n")
+            f.write(f"Average PSNR: {avg_psnr:.4f} dB\n")
+            f.write(f"Average SSIM: {avg_ssim:.4f}\n")
+            f.write(f"Average MSE:  {avg_mse:.4f}\n")
+
+        print("\n" + "=" * 55)
+        print("EVALUATION COMPLETE")
+        print(f"Average PSNR: {avg_psnr:.4f} dB")
+        print(f"Average SSIM: {avg_ssim:.4f}")
+        print(f"Average MSE:  {avg_mse:.4f}")
+        print(f"Outputs saved to: {output_dir}")
+        print("=" * 55)
 
 
 if __name__ == '__main__':
-    opt = TestOptions().parse()
-    evaluate(opt)
+    import argparse
+    parser = argparse.ArgumentParser(description="Evaluate Mamba-PFAN on test images")
+    parser.add_argument('--checkpoint', type=str, default='./checkpoints/mamba_Final/latest_net_G.pth', help='Path to generator .pth file')
+    parser.add_argument('--test_dir', type=str, default='./datasets/composite/test', help='Path to test folder (contains A and B or images)')
+    parser.add_argument('--output_dir', type=str, default='./results/mamba_eval', help='Output directory for generated images')
+    args = parser.parse_args()
+
+    evaluate(
+        checkpoint_path=args.checkpoint,
+        test_dir=args.test_dir,
+        output_dir=args.output_dir
+    )
