@@ -68,6 +68,38 @@ def get_shape(tensor):
         shape = [i.cpu().numpy() for i in shape]
     return shape
 
+def build_norm_layer(cfg, num_features, postfix=''):
+    if cfg is None:
+        return '', nn.Identity()
+    if isinstance(cfg, dict):
+        layer_type = cfg.get('type', 'BN')
+        requires_grad = cfg.get('requires_grad', True)
+        if layer_type in ('BN', 'BatchNorm2d'):
+            layer = nn.BatchNorm2d(num_features)
+        elif layer_type in ('SyncBN', 'SyncBatchNorm'):
+            layer = nn.SyncBatchNorm(num_features)
+        elif layer_type in ('GN', 'GroupNorm'):
+            num_groups = cfg.get('num_groups', 32)
+            layer = nn.GroupNorm(num_groups, num_features)
+        elif layer_type in ('LN', 'LayerNorm'):
+            layer = nn.LayerNorm(num_features)
+        else:
+            layer = nn.BatchNorm2d(num_features)
+        for param in layer.parameters():
+            param.requires_grad = requires_grad
+        return f'bn{postfix}', layer
+    return f'bn{postfix}', nn.BatchNorm2d(num_features)
+
+
+def get_root_logger():
+    import logging
+    return logging.getLogger()
+
+
+def _load_checkpoint(filename, logger=None, map_location='cpu'):
+    return torch.load(filename, map_location=map_location)
+
+
 #
 class Conv2d_BN(nn.Sequential):
     def __init__(self, a, b, ks=1, stride=1, pad=0, dilation=1,
