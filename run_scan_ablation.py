@@ -23,7 +23,7 @@ def build_command(args, mode):
     command = [
         sys.executable,
         str(Path(__file__).with_name("train.py")),
-        "--dataroot", args.dataroot,
+        "--dataroot", str(args.dataroot),
         "--name", f"{args.name}_{mode}",
         "--model", "pix2pix",
         "--netG", "mamba_pfan",
@@ -31,7 +31,7 @@ def build_command(args, mode):
         "--direction", "AtoB",
         "--dataset_mode", "aligned",
         "--norm", "batch",
-        "--checkpoints_dir", args.checkpoints_dir,
+        "--checkpoints_dir", str(args.checkpoints_dir),
         "--embed_dim", str(args.embed_dim),
         "--ndf", str(args.ndf),
         "--ngf", str(args.ngf),
@@ -41,10 +41,11 @@ def build_command(args, mode):
         "--n_epochs_decay", str(args.n_epochs_decay),
         "--save_epoch_freq", str(args.save_epoch_freq),
         "--display_id", "-1",
+        "--print_freq", str(args.print_freq),
         "--scan_mode", mode,
     ]
     if args.gpu_ids is not None:
-        command.extend(["--gpu_ids", args.gpu_ids])
+        command.extend(["--gpu_ids", str(args.gpu_ids)])
     if args.no_flip:
         command.append("--no_flip")
     return command
@@ -63,9 +64,11 @@ def main():
     parser.add_argument("--n-epochs", type=int, default=50)
     parser.add_argument("--n-epochs-decay", type=int, default=0)
     parser.add_argument("--save-epoch-freq", type=int, default=5)
+    parser.add_argument("--print-freq", type=int, default=20)
     parser.add_argument("--gpu-ids", default="0")
     parser.add_argument("--modes", nargs="+", choices=SCAN_MODES, default=list(SCAN_MODES))
     parser.add_argument("--no-flip", action="store_true")
+    parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--manifest-output", default="scan_ablation_commands.json")
     args = parser.parse_args()
@@ -83,13 +86,20 @@ def main():
             "batch_size": args.batch_size,
             "n_epochs": args.n_epochs,
             "n_epochs_decay": args.n_epochs_decay,
+            "print_freq": args.print_freq,
             "no_flip": args.no_flip,
         },
     }
     Path(args.manifest_output).write_text(json.dumps(manifest, indent=2))
 
-    for command in commands:
-        print(" ".join(command))
+    checkpoints_dir = Path(args.checkpoints_dir)
+    for mode in args.modes:
+        ckpt = checkpoints_dir / f"{args.name}_{mode}" / "latest_net_G.pth"
+        if args.skip_existing and ckpt.is_file():
+            print(f"[SKIP] Existing checkpoint found for {mode}: {ckpt}", flush=True)
+            continue
+        command = build_command(args, mode)
+        print("Running:", " ".join(command), flush=True)
         if not args.dry_run:
             subprocess.run(command, check=True, cwd=Path(__file__).parent)
 
