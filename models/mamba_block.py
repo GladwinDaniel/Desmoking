@@ -23,11 +23,14 @@ class DirectionalSSM2D(nn.Module):
     Processes spatial context along horizontal and vertical axes with
     input-dependent selective state transitions.
     """
-    def __init__(self, d_model, d_state=16, d_conv=5, expand=2):
+    def __init__(self, d_model, d_state=16, d_conv=5, expand=2, axes=('horizontal', 'vertical')):
         super().__init__()
         self.d_model = d_model
         self.d_state = d_state
         self.expand = expand
+        self.axes = set(axes)
+        if not self.axes.issubset({'horizontal', 'vertical'}) or not self.axes:
+            raise ValueError("axes must contain horizontal and/or vertical")
         self.d_inner = int(expand * d_model)
         
         # Dual-branch projection: features + gating branch (Mamba architecture)
@@ -101,7 +104,12 @@ class DirectionalSSM2D(nn.Module):
         state_v = decay_v * x_v + (1.0 - decay_v) * (x_ch * B_gate)
         
         # 4. State Output with Selective Reading & Direct Skip (D parameter)
-        ssm_out = (state_h + state_v) * C_gate + x_ch * self.D
+        directional_states = []
+        if 'horizontal' in self.axes:
+            directional_states.append(state_h)
+        if 'vertical' in self.axes:
+            directional_states.append(state_v)
+        ssm_out = sum(directional_states) * C_gate + x_ch * self.D
         
         # 5. Gating with z branch (SiLU gate as in standard Mamba)
         y = ssm_out * F.silu(z_ch)
@@ -118,16 +126,30 @@ class VSSBlock(nn.Module):
     Visual State Space Block with Bidirectional 2D-SSM.
     Combines forward-backward directional SSM with LayerNorm and residual connection.
     """
-    def __init__(self, dim, d_state=16, d_conv=5, expand=2):
+    def __init__(self, dim, d_state=16, d_conv=5, expand=2, scan_mode='four_way'):
         super().__init__()
         self.dim = dim
+        valid_modes = {'horizontal_forward', 'horizontal_bidirectional',
+                       'vertical_bidirectional', 'four_way'}
+        if scan_mode not in valid_modes:
+            raise ValueError(f"scan_mode must be one of {sorted(valid_modes)}")
+        self.scan_mode = scan_mode
         self.norm = nn.LayerNorm(dim)
-        
-        # Bidirectional 2D Selective SSM layers (Standard + Flipped for full 4-way coverage)
-        self.ssm_fwd = DirectionalSSM2D(dim, d_state=d_state, d_conv=d_conv, expand=expand)
-        self.ssm_bwd = DirectionalSSM2D(dim, d_state=d_state, d_conv=d_conv, expand=expand)
-        
-        self.fusion = nn.Linear(dim * 2, dim, bias=False)
+
+        axes = ('horizontal', 'vertical') if scan_mode == 'four_way' else (
+            'horizontal' if scan_mode.startswith('horizontal') else 'vertical',
+        )
+        self.ssm_fwd = DirectionalSSM2D(
+            dim, d_state=d_state, d_conv=d_conv, expand=expand, axes=axes
+        )
+        self.bidirectional = scan_mode != 'horizontal_forward'
+        if self.bidirectional:
+            self.ssm_bwd = DirectionalSSM2D(
+                dim, d_state=d_state, d_conv=d_conv, expand=expand, axes=axes
+            )
+            self.fusion = nn.Linear(dim * 2, dim, bias=False)
+        else:
+            self.ssm_bwd = None
 
     def forward(self, x):
         """
@@ -139,14 +161,12 @@ class VSSBlock(nn.Module):
         B, H, W, C = x.shape
         x_norm = self.norm(x)
         
-        # Forward scan across 2D plane
         y_fwd = self.ssm_fwd(x_norm)
-        
-        # Backward scan across flipped 2D plane (covers reverse spatial causality)
+        if not self.bidirectional:
+            return y_fwd
+
         x_flip = x_norm.flip(dims=[1, 2]).contiguous()
         y_bwd = self.ssm_bwd(x_flip).flip(dims=[1, 2]).contiguous()
-        
-        # Multi-directional fusion
         out = self.fusion(torch.cat([y_fwd, y_bwd], dim=-1))
         
         return out
@@ -157,9 +177,11 @@ class MambaVisionBlock(nn.Module):
     Drop-in replacement for Sea_Attention in PFAN's SwinBlock.
     Takes NHWC tensor, applies 2D Visual Mamba SSM, returns NHWC tensor.
     """
-    def __init__(self, dim, d_state=16, d_conv=5, expand=2):
+    def __init__(self, dim, d_state=16, d_conv=5, expand=2, scan_mode='four_way'):
         super().__init__()
-        self.vss = VSSBlock(dim, d_state=d_state, d_conv=d_conv, expand=expand)
+        self.vss = VSSBlock(
+            dim, d_state=d_state, d_conv=d_conv, expand=expand, scan_mode=scan_mode
+        )
 
     def forward(self, x):
         return self.vss(x)

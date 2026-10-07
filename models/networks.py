@@ -144,7 +144,7 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
     return net
 
 
-def define_G(opt,input_nc, output_nc, ngf, netG, norm=None, use_dropout=False, init_type='kaiming', init_gain=0.02, gpu_ids=[]):
+def define_G(opt,input_nc, output_nc, ngf, netG, norm=None, use_dropout=False, init_type='kaiming', init_gain=0.02, gpu_ids=[], scan_mode='four_way'):
     """Create a generator
 
     Parameters:
@@ -191,7 +191,8 @@ def define_G(opt,input_nc, output_nc, ngf, netG, norm=None, use_dropout=False, i
         net = PFAN(input_nc=input_nc, output_nc=output_nc, ngf=ngf ,hidden_dim=ngf,layers=[2,2,2],heads=[4,4,4], norm_layer_1=norm_layer)
     elif netG == 'mamba_pfan':
         net = MambaPFAN(input_nc=input_nc, output_nc=output_nc, ngf=ngf, hidden_dim=ngf,
-                        layers=[2,2,2], d_state=16, d_conv=4, expand=2, norm_layer_1=norm_layer)
+                        layers=[2,2,2], d_state=16, d_conv=4, expand=2,
+                        scan_mode=scan_mode, norm_layer_1=norm_layer)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netG)
     return init_net(net, init_type, init_gain, gpu_ids)

@@ -79,12 +79,14 @@ class MambaSwinBlock(nn.Module):
     Uses MambaVisionBlock instead of Sea_Attention.
     Keeps LeFF as the feed-forward network.
     """
-    def __init__(self, dim, mlp_dim, d_state=16, d_conv=4, expand=2):
+    def __init__(self, dim, mlp_dim, d_state=16, d_conv=4, expand=2,
+                 scan_mode='four_way'):
         super().__init__()
         from models.networks import LeFF
 
         self.attention_block = Residual(PreNorm(dim, MambaVisionBlock(
-            dim=dim, d_state=d_state, d_conv=d_conv, expand=expand
+            dim=dim, d_state=d_state, d_conv=d_conv, expand=expand,
+            scan_mode=scan_mode
         )))
         self.mlp_block = Residual(PreNorm(dim, LeFF(dim=dim, hidden_dim=mlp_dim)))
 
@@ -118,7 +120,7 @@ class MambaStageModule(nn.Module):
     Uses MambaSwinBlock pairs instead of SwinBlock pairs.
     """
     def __init__(self, in_channels, hidden_dimension, layers, downscaling_factor,
-                 d_state=16, d_conv=4, expand=2):
+                 d_state=16, d_conv=4, expand=2, scan_mode='four_way'):
         super().__init__()
         assert layers % 2 == 0, 'Stage layers need to be divisible by 2.'
 
@@ -132,9 +134,11 @@ class MambaStageModule(nn.Module):
         for _ in range(layers // 2):
             self.layers.append(nn.ModuleList([
                 MambaSwinBlock(dim=hidden_dimension, mlp_dim=hidden_dimension * 4,
-                              d_state=d_state, d_conv=d_conv, expand=expand),
+                              d_state=d_state, d_conv=d_conv, expand=expand,
+                              scan_mode=scan_mode),
                 MambaSwinBlock(dim=hidden_dimension, mlp_dim=hidden_dimension * 4,
-                              d_state=d_state, d_conv=d_conv, expand=expand),
+                              d_state=d_state, d_conv=d_conv, expand=expand,
+                              scan_mode=scan_mode),
             ]))
 
     def forward(self, x):
@@ -151,7 +155,7 @@ class MambaViTs(nn.Module):
     Uses MambaStageModule + ChannelGate for global feature extraction.
     """
     def __init__(self, in_channels, hidden_dimension, layers, downscaling_factor,
-                 d_state=16, d_conv=4, expand=2):
+                 d_state=16, d_conv=4, expand=2, scan_mode='four_way'):
         super().__init__()
         self.stage1 = MambaStageModule(
             in_channels=in_channels,
@@ -160,7 +164,8 @@ class MambaViTs(nn.Module):
             downscaling_factor=downscaling_factor,
             d_state=d_state,
             d_conv=d_conv,
-            expand=expand
+            expand=expand,
+            scan_mode=scan_mode
         )
         self.channel_att = ChannelGate(hidden_dimension, reduction_ratio=16, pool_types=['avg', 'max'])
 
@@ -193,7 +198,7 @@ class MambaPFAN(nn.Module):
     """
     def __init__(self, *, input_nc, output_nc, ngf, hidden_dim,
                  layers, d_state=16, d_conv=4, expand=2,
-                 downscaling_factors=(1, 1, 1, 1),
+                 downscaling_factors=(1, 1, 1, 1), scan_mode='four_way',
                  norm_layer_1='batch'):
         super().__init__()
         from models.networks import Block
@@ -223,7 +228,8 @@ class MambaPFAN(nn.Module):
             downscaling_factor=downscaling_factors[2],
             d_state=d_state,
             d_conv=d_conv,
-            expand=expand
+            expand=expand,
+            scan_mode=scan_mode
         )
 
         # 4. Output projection

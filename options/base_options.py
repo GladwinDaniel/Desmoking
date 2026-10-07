@@ -65,6 +65,10 @@ class BaseOptions():
         parser.add_argument('--embed_dim', type=int, default=64, help='dim of emdeding features')
         parser.add_argument('--win_size', type=int, default=8, help='window size of self-attention')
         parser.add_argument('--token_projection', type=str,default='linear', help='linear/conv token projection')
+        parser.add_argument('--scan_mode', type=str, default='four_way',
+                    choices=['horizontal_forward', 'horizontal_bidirectional',
+                         'vertical_bidirectional', 'four_way'],
+                    help='Mamba scan-direction ablation mode')
         # parser.add_argument('--depths', type=list,default=[2, 2, 2, 2, 2, 2, 2, 2, 2], help='linear/conv token projection')
         
         
