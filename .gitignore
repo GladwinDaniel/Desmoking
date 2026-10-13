@@ -18,3 +18,13 @@ datasets/
 .idea/
 .DS_Store
 Thumbs.db
+
+# LaTeX temporary build artifacts
+*.aux
+*.log
+*.synctex*
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+
