@@ -1,0 +1,25 @@
+{
+  "model": "mamba_pfan",
+  "scan_mode": "horizontal_forward",
+  "checkpoint": "/kaggle/working/mamba_pfan/checkpoints/mamba_scan_horizontal_forward/latest_net_G.pth",
+  "test_dir": "/kaggle/input/datasets/aarunkumaran/desomking-dataset/test",
+  "num_images": 103,
+  "metrics": {
+    "mse": {
+      "mean": 430.84326932345397,
+      "std": 210.49345284069872
+    },
+    "psnr_db": {
+      "mean": 22.303616683835806,
+      "std": 2.1594981763325514
+    },
+    "ssim": {
+      "mean": 0.850770371814717,
+      "std": 0.05095347533993062
+    },
+    "ciede2000": {
+      "mean": 6.756024897677227,
+      "std": 1.6745062295461182
+    }
+  }
+}

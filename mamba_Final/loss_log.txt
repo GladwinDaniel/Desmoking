@@ -1,0 +1,40 @@
+================ Training Loss (Wed Aug 26 13:28:54 2026) ================
+================ Training Loss (Wed Aug 26 13:31:07 2026) ================
+================ Training Loss (Wed Aug 26 13:52:46 2026) ================
+(epoch: 1, iters: 20, time: 8.960, data: 0.068) G_GAN: 1.067 G_L1: 53.703 D_real: 0.932 D_fake: 0.531 
+(epoch: 1, iters: 40, time: 9.341, data: 0.050) G_GAN: 0.978 G_L1: 40.622 D_real: 0.842 D_fake: 0.595 
+(epoch: 1, iters: 60, time: 9.403, data: 0.049) G_GAN: 1.010 G_L1: 51.394 D_real: 0.711 D_fake: 0.566 
+(epoch: 1, iters: 80, time: 9.283, data: 0.040) G_GAN: 0.972 G_L1: 49.611 D_real: 0.654 D_fake: 0.588 
+(epoch: 1, iters: 100, time: 8.939, data: 0.039) G_GAN: 1.036 G_L1: 48.219 D_real: 0.581 D_fake: 0.560 
+(epoch: 1, iters: 120, time: 9.057, data: 0.039) G_GAN: 1.078 G_L1: 52.316 D_real: 0.520 D_fake: 0.506 
+(epoch: 1, iters: 140, time: 9.363, data: 0.045) G_GAN: 1.123 G_L1: 44.385 D_real: 0.581 D_fake: 0.497 
+(epoch: 1, iters: 160, time: 9.345, data: 0.038) G_GAN: 1.248 G_L1: 42.807 D_real: 0.439 D_fake: 0.418 
+(epoch: 1, iters: 180, time: 9.366, data: 0.037) G_GAN: 1.359 G_L1: 53.035 D_real: 0.384 D_fake: 0.371 
+(epoch: 1, iters: 200, time: 9.266, data: 0.064) G_GAN: 1.393 G_L1: 47.112 D_real: 0.411 D_fake: 0.350 
+(epoch: 1, iters: 220, time: 8.942, data: 0.055) G_GAN: 1.407 G_L1: 53.732 D_real: 0.352 D_fake: 0.342 
+(epoch: 1, iters: 240, time: 9.042, data: 0.062) G_GAN: 1.557 G_L1: 46.611 D_real: 0.315 D_fake: 0.298 
+(epoch: 1, iters: 260, time: 9.363, data: 0.074) G_GAN: 1.498 G_L1: 43.492 D_real: 0.325 D_fake: 0.312 
+(epoch: 1, iters: 280, time: 9.351, data: 0.070) G_GAN: 1.500 G_L1: 45.773 D_real: 0.373 D_fake: 0.313 
+(epoch: 1, iters: 300, time: 9.374, data: 0.056) G_GAN: 1.623 G_L1: 44.134 D_real: 0.263 D_fake: 0.268 
+(epoch: 1, iters: 320, time: 9.263, data: 0.058) G_GAN: 1.654 G_L1: 43.295 D_real: 0.269 D_fake: 0.264 
+(epoch: 1, iters: 340, time: 8.951, data: 0.052) G_GAN: 1.947 G_L1: 46.277 D_real: 0.183 D_fake: 0.190 
+(epoch: 1, iters: 360, time: 9.068, data: 0.039) G_GAN: 1.931 G_L1: 38.951 D_real: 0.258 D_fake: 0.194 
+(epoch: 1, iters: 380, time: 9.358, data: 0.037) G_GAN: 1.844 G_L1: 40.629 D_real: 0.218 D_fake: 0.211 
+(epoch: 1, iters: 400, time: 9.356, data: 0.042) G_GAN: 2.037 G_L1: 40.048 D_real: 0.165 D_fake: 0.178 
+(epoch: 1, iters: 420, time: 9.381, data: 0.096) G_GAN: 1.681 G_L1: 40.408 D_real: 0.275 D_fake: 0.258 
+(epoch: 1, iters: 440, time: 9.271, data: 0.042) G_GAN: 2.195 G_L1: 43.055 D_real: 0.151 D_fake: 0.156 
+(epoch: 1, iters: 460, time: 8.936, data: 0.040) G_GAN: 2.130 G_L1: 43.647 D_real: 0.119 D_fake: 0.166 
+(epoch: 1, iters: 480, time: 9.051, data: 0.095) G_GAN: 2.119 G_L1: 40.845 D_real: 0.186 D_fake: 0.165 
+(epoch: 1, iters: 500, time: 9.362, data: 0.044) G_GAN: 2.380 G_L1: 34.971 D_real: 0.110 D_fake: 0.117 
+(epoch: 1, iters: 520, time: 9.356, data: 0.041) G_GAN: 2.621 G_L1: 41.253 D_real: 0.135 D_fake: 0.097 
+(epoch: 1, iters: 540, time: 9.389, data: 0.093) G_GAN: 2.693 G_L1: 35.742 D_real: 0.096 D_fake: 0.086 
+(epoch: 1, iters: 560, time: 9.279, data: 0.037) G_GAN: 2.430 G_L1: 26.224 D_real: 0.172 D_fake: 0.117 
+(epoch: 1, iters: 580, time: 8.935, data: 0.041) G_GAN: 2.933 G_L1: 38.626 D_real: 0.095 D_fake: 0.073 
+(epoch: 1, iters: 600, time: 9.058, data: 0.039) G_GAN: 2.468 G_L1: 37.535 D_real: 0.171 D_fake: 0.123 
+(epoch: 1, iters: 620, time: 9.388, data: 0.048) G_GAN: 2.533 G_L1: 31.442 D_real: 0.105 D_fake: 0.109 
+(epoch: 1, iters: 640, time: 9.364, data: 0.039) G_GAN: 2.833 G_L1: 32.600 D_real: 0.081 D_fake: 0.082 
+(epoch: 1, iters: 660, time: 9.393, data: 0.040) G_GAN: 2.661 G_L1: 29.027 D_real: 0.112 D_fake: 0.100 
+================ Training Loss (Wed Aug 26 14:47:53 2026) ================
+================ Training Loss (Wed Aug 26 14:53:45 2026) ================
+================ Training Loss (Wed Aug 26 14:56:42 2026) ================
+================ Training Loss (Wed Aug 26 15:03:17 2026) ================

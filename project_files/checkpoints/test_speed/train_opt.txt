@@ -1,0 +1,67 @@
+----------------- Options ---------------
+               batch_size: 4                             	[default: 6]
+                    beta1: 0.5                           
+          checkpoints_dir: ./checkpoints                 
+           continue_train: False                         
+                crop_size: 256                           
+                 dataroot: ./datasets/composite          	[default: None]
+             dataset_mode: aligned                       
+                    dd_in: 3                             
+                direction: AtoB                          
+              display_env: main                          
+             display_freq: 100                           
+               display_id: -1                            	[default: 1]
+            display_ncols: 4                             
+             display_port: 8097                          
+           display_server: http://localhost              
+          display_winsize: 256                           
+                embed_dim: 64                            
+                    epoch: latest                        
+              epoch_count: 1                             
+                 gan_mode: vanilla                       
+                  gpu_ids: 0                             	[default: 0,1,2,3]
+                init_gain: 0.02                          
+                init_type: normal                        
+                 input_nc: 3                             
+                  isTrain: True                          	[default: None]
+                lambda_L1: 100.0                         
+                load_iter: 0                             	[default: 0]
+                load_size: 286                           
+                       lr: 0.0002                        
+           lr_decay_iters: 50                            
+                lr_policy: cosine                        
+         max_dataset_size: inf                           
+                    model: pix2pix                       
+                 n_epochs: 200                           
+           n_epochs_decay: 0                             
+               n_layers_D: 3                             
+                     name: test_speed                    	[default: experiment_name]
+                      ndf: 64                            
+                     netD: basic                         
+                     netG: mamba_pfan                    	[default: unet_256]
+                      ngf: 64                            
+               no_dropout: False                         
+                  no_flip: False                         
+                  no_html: False                         
+                     norm: batch                         
+              num_threads: 0                             	[default: 4]
+                output_nc: 3                             
+                    phase: train                         
+                pool_size: 0                             
+               preprocess: resize_and_crop               
+               print_freq: 1000                          
+             save_by_iter: False                         
+          save_epoch_freq: 5                             
+         save_latest_freq: 10000                         
+           serial_batches: False                         
+                   suffix:                               
+                 syn_norm: False                         
+         token_projection: linear                        
+                 train_ps: 256                           
+         update_html_freq: 1000                          
+                 use_norm: 1                             
+                use_wandb: False                         
+                  verbose: False                         
+       wandb_project_name: CycleGAN-and-pix2pix          
+                 win_size: 8                             
+----------------- End -------------------

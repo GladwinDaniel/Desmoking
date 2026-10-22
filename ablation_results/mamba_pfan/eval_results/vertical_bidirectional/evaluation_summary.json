@@ -1,0 +1,25 @@
+{
+  "model": "mamba_pfan",
+  "scan_mode": "vertical_bidirectional",
+  "checkpoint": "/kaggle/working/mamba_pfan/checkpoints/mamba_scan_vertical_bidirectional/latest_net_G.pth",
+  "test_dir": "/kaggle/input/datasets/dannyboi007/desmoking-dataset/test",
+  "num_images": 103,
+  "metrics": {
+    "mse": {
+      "mean": 377.25364304823387,
+      "std": 198.88325147640603
+    },
+    "psnr_db": {
+      "mean": 22.902078195739723,
+      "std": 2.161345337114168
+    },
+    "ssim": {
+      "mean": 0.8468837946882894,
+      "std": 0.05035214960349511
+    },
+    "ciede2000": {
+      "mean": 6.447610419930764,
+      "std": 1.3792093601312783
+    }
+  }
+}

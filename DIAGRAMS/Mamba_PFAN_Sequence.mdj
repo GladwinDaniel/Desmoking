@@ -1,0 +1,318 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAFUHJvalNlcV8xYTU0M",
+  "name": "Mamba-PFAN Sequence Model",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFTW9kU2VxX2UzODkwM",
+      "_parent": {
+        "$ref": "AAAAAAFUHJvalNlcV8xYTU0M"
+      },
+      "name": "Sequence Model",
+      "ownedElements": [
+        {
+          "_type": "UMLCollaboration",
+          "_id": "AAAAAAFQ29sbGFiXzdjNjBhN",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kU2VxX2UzODkwM"
+          },
+          "name": "Real-Time Desmoking Execution",
+          "ownedElements": [
+            {
+              "_type": "UMLInteraction",
+              "_id": "AAAAAAFSW50ZXJfZDM3MTNhY",
+              "_parent": {
+                "$ref": "AAAAAAFQ29sbGFiXzdjNjBhN"
+              },
+              "name": "Frame De-Smoking Interaction",
+              "ownedElements": [
+                {
+                  "_type": "UMLSequenceDiagram",
+                  "_id": "AAAAAAFRGlhZ1NlcV82NDM2Y",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "Mamba-PFAN Real-Time Inference Sequence Diagram",
+                  "visible": true,
+                  "defaultDiagram": true,
+                  "ownedViews": []
+                }
+              ],
+              "participants": [
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfNjA4N2QwNWZhM",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "Laparoscopic Surgeon"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfYjFhMzBlZTJmZ",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "InferenceController"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfNTA0ZjIxMmE4M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "MambaPFAN (Generator)"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfM2IwNzhmOWI5Z",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "ConvNeXtBlock (Local Features)"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfMTU2YWQ0YzA5M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "MambaViTs (2D-SSM Global)"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfNzIzYmIzOThhM",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "ChannelGate (Attention)"
+                },
+                {
+                  "_type": "UMLLifeline",
+                  "_id": "AAAAAAFTExfMTA2NzE5NDMxM",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "Surgical Display Monitor"
+                }
+              ],
+              "messages": [
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnX2ZjZDdiNzZlZ",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "1: startVideoFeed(camera_stream)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNjA4N2QwNWZhM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzQzY2VmMGViY",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "2: preprocessFrame(resize 256x256, normalize)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzJjMmM5YzE2M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "3: forward(smoky_tensor)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnX2NjODQxZjNkY",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "4: extract_local_features(x)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfM2IwNzhmOWI5Z"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzdhZmExOWQ1M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "5: return local_feature_map",
+                  "source": {
+                    "$ref": "AAAAAAFTExfM2IwNzhmOWI5Z"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnX2VjNjM2OTQ0Z",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "6: extract_global_context(x1)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzA0ODA3ZGQxN",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "7: 4_way_cross_scan_2d_ssm()",
+                  "source": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnX2Q3MzEwNmY3M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "8: recalibrate_channels(global_feat)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNzIzYmIzOThhM"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzc5Mzg2NWIwM",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "9: return gated_features",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNzIzYmIzOThhM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnX2IxZjQxY2Y1Y",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "10: return global_context_map",
+                  "source": {
+                    "$ref": "AAAAAAFTExfMTU2YWQ0YzA5M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzE2ZmU3NmI4N",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "11: fuse_skip_connections() + 1x1 Conv + Tanh",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzgzMTk0YTUwN",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "12: return restored_desmoked_frame",
+                  "source": {
+                    "$ref": "AAAAAAFTExfNTA0ZjIxMmE4M"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzhiZjJkOTY0M",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "13: renderEnhancedStream(clear_rgb)",
+                  "source": {
+                    "$ref": "AAAAAAFTExfYjFhMzBlZTJmZ"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfMTA2NzE5NDMxM"
+                  },
+                  "messageSort": "synchCall"
+                },
+                {
+                  "_type": "UMLMessage",
+                  "_id": "AAAAAAFTXNnXzYzZmNjYTc3O",
+                  "_parent": {
+                    "$ref": "AAAAAAFSW50ZXJfZDM3MTNhY"
+                  },
+                  "name": "14: displayCleanVisualFeedback()",
+                  "source": {
+                    "$ref": "AAAAAAFTExfMTA2NzE5NDMxM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFTExfNjA4N2QwNWZhM"
+                  },
+                  "messageSort": "synchCall"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

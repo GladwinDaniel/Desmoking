@@ -1,0 +1,96 @@
+\relax 
+\citation{jaschinski2018}
+\citation{tchoulack2014}
+\citation{bolkar2018}
+\citation{kotwal2016}
+\citation{armanious2020}
+\citation{he2011}
+\citation{jobson1997}
+\citation{chen2022}
+\citation{isola2017,zhu2017}
+\citation{deng2019}
+\citation{dosovitskiy2020}
+\citation{liu2021swin}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\citation{pfan2024}
+\citation{gu2023mamba,liu2024vmamba}
+\citation{he2011}
+\citation{bolkar2018}
+\citation{kotwal2016}
+\citation{chen2022}
+\citation{isola2017}
+\citation{zhu2017}
+\citation{deng2019}
+\citation{pfan2024}
+\citation{gu2023mamba}
+\citation{zhu2024visionmamba}
+\citation{liu2024vmamba}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Surgical Smoke Removal and Physical Priors}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Deep Learning and GAN-based De-Smoking}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Frequency-Aware Representations in Laparoscopy}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Selective State Space Models (Mamba)}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Proposed Methodology: Mamba-PFAN}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Architectural Overview}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Comprehensive architecture of the proposed Mamba-PFAN generator. The model decouples smoke removal into a high-frequency ConvNeXt-MBI stream and a global low-frequency 2D Selective State Space Model (2D-SSM) stream. The Four-Way Cross-Selective Scanning (4-Way CSS) mechanism propagates context bidirectionally across both horizontal and vertical axes with strictly linear $\mathcal  {O}(N)$ complexity, requiring only 387.9K parameters.}}{3}{}\protected@file@percent }
+\newlabel{fig:architecture}{{1}{3}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}High-Frequency Extraction (ConvNeXt-MBI Pathway)}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Directional 2D Selective State Space Layer (2D-SSM)}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Four-Way Cross-Selective Scanning Mechanism (4-Way CSS)}{3}{}\protected@file@percent }
+\citation{twinanda2017endonet}
+\citation{bolkar2018,pfan2024}
+\citation{luo2001ciede2000}
+\citation{he2011}
+\citation{zhu2017}
+\citation{isola2017}
+\citation{pfan2024}
+\citation{he2011}
+\citation{zhu2017}
+\citation{isola2017}
+\citation{pfan2024}
+\citation{pfan2024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Loss Formulations}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Dataset and Smoke Synthesis}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Implementation Details}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Standardized Evaluation Protocol}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Experimental Results and Analysis}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Quantitative Performance Comparison}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Analytical Discussion of the Frequency \& Color Trade-off}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Scan-Direction Ablation Study}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Visual qualitative comparisons on representative Cholec80 laparoscopic test frames. Each panel presents [Left: Smoke-degraded Input; Center: Mamba-PFAN Restored Output; Right: Clean Ground Truth]. Mamba-PFAN effectively penetrates dense smoke plumes while preserving liver capsule texture, electrosurgical glare boundaries, and fine metallic instrument contours.}}{5}{}\protected@file@percent }
+\newlabel{fig:visual_results}{{2}{5}{}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Comparative Benchmark Across Published Methods on the Cholec80 Surgical Smoke Dataset.}}{5}{}\protected@file@percent }
+\newlabel{tab:benchmark}{{I}{5}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Scan-Direction Ablation Study on 103 Cholec80 Laparoscopic Test Pairs.}}{5}{}\protected@file@percent }
+\newlabel{tab:ablation}{{II}{5}{}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Directional Trajectory Analysis}{5}{}\protected@file@percent }
+\citation{pfan2024}
+\bibstyle{IEEEtran}
+\bibcite{jaschinski2018}{1}
+\bibcite{tchoulack2014}{2}
+\bibcite{bolkar2018}{3}
+\bibcite{kotwal2016}{4}
+\bibcite{armanious2020}{5}
+\bibcite{he2011}{6}
+\bibcite{jobson1997}{7}
+\bibcite{chen2022}{8}
+\bibcite{isola2017}{9}
+\bibcite{zhu2017}{10}
+\bibcite{deng2019}{11}
+\bibcite{dosovitskiy2020}{12}
+\bibcite{liu2021swin}{13}
+\bibcite{pfan2024}{14}
+\bibcite{gu2023mamba}{15}
+\bibcite{liu2024vmamba}{16}
+\bibcite{zhu2024visionmamba}{17}
+\bibcite{twinanda2017endonet}{18}
+\bibcite{luo2001ciede2000}{19}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Side-by-side visual comparison across the scan-direction ablation matrix on Cholec80 surgical test frame \#0007. Columns from left to right: [1] Smoke-degraded Input, [2] Horizontal 1-Way Forward, [3] Horizontal 2-Way Bidirectional, [4] Vertical 2-Way Bidirectional, [5] Proposed Four-Way Cross-Scan, and [6] Ground Truth Clean Image. Four-way cross-scanning achieves the highest tissue clarity and eliminates directional haze residual.}}{6}{}\protected@file@percent }
+\newlabel{fig:ablation_visual}{{3}{6}{}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Computational Complexity and Real-Time Viability}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Computational Resource Comparison.}}{6}{}\protected@file@percent }
+\newlabel{tab:complexity}{{III}{6}{}{table.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
+\gdef \@abspage@last{6}

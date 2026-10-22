@@ -1,0 +1,334 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAFUHJvakFjdF84ZWI3M",
+  "name": "Mamba-PFAN Activity Model",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFTW9kQWN0XzQwNjU0Y",
+      "_parent": {
+        "$ref": "AAAAAAFUHJvakFjdF84ZWI3M"
+      },
+      "name": "Activity Model",
+      "ownedElements": [
+        {
+          "_type": "UMLActivity",
+          "_id": "AAAAAAFQWN0aXZpdHlfYTJlO",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kQWN0XzQwNjU0Y"
+          },
+          "name": "Mamba-PFAN DeSmoking Process Flow",
+          "ownedElements": [
+            {
+              "_type": "UMLActivityDiagram",
+              "_id": "AAAAAAFRGlhZ0FjdF82Nzc2N",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Mamba-PFAN Pipeline Activity Diagram",
+              "visible": true,
+              "defaultDiagram": true,
+              "ownedViews": []
+            }
+          ],
+          "nodes": [
+            {
+              "_type": "UMLInitialNode",
+              "_id": "AAAAAAFQWN0Tm9kZV83YTk0N",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Start Video Streaming"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV8yNDcxM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Acquire Live Laparoscopic Frame"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV8yYjJmM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Preprocess Frame (Resize 256x256, Normalize)"
+            },
+            {
+              "_type": "UMLDecisionNode",
+              "_id": "AAAAAAFQWN0Tm9kZV9iNzZlY",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Check Smoke Density"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV83YmE3Z",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Extract Local Features (7x7 ConvNeXt Block x2)"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV83ZTY4Z",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Execute 4-Way Cross-Scan 2D-SSM (Global Context)"
+            },
+            {
+              "_type": "UMLMergeNode",
+              "_id": "AAAAAAFQWN0Tm9kZV8wZjUzZ",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Merge Local & Global Features"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV83NDRjY",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Apply Channel Attention (ChannelGate Dual Pooling)"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV9hOGNhO",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Add Global Residual Skip Connection (x + x2)"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV9lNzc4N",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Output Projection (1x1 Conv + Tanh Activation)"
+            },
+            {
+              "_type": "UMLAction",
+              "_id": "AAAAAAFQWN0Tm9kZV9hMjc1N",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "Stream Enhanced Smoke-Free Frame to OR Monitor"
+            },
+            {
+              "_type": "UMLActivityFinalNode",
+              "_id": "AAAAAAFQWN0Tm9kZV82ZjllN",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "End Stream Session"
+            }
+          ],
+          "edges": [
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd19lNzk0ZWJmM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83YTk0N"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8yNDcxM"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd183NGQzMDNhZ",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8yNDcxM"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8yYjJmM"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd182MTkyNGRkN",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8yYjJmM"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9iNzZlY"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd19jNGRjZTZmM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "[Smoke Detected]",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9iNzZlY"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83YmE3Z"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd18wMzI0ZmQ5M",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "[Smoke Detected]",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9iNzZlY"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83ZTY4Z"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd19iMjBmZDc4M",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "[No Smoke / Pass Through]",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9iNzZlY"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hMjc1N"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd182YWQ1ODI4Z",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83YmE3Z"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8wZjUzZ"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd18zMDMyMzQwN",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83ZTY4Z"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8wZjUzZ"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd18xZWNhNzIxM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8wZjUzZ"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83NDRjY"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd182MTM1YjhhM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV83NDRjY"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hOGNhO"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd19jMjkzZWUzZ",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hOGNhO"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9lNzc4N"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd182OWU4MjExM",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9lNzc4N"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hMjc1N"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd19kM2I5OTljZ",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "[Next Frame]",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hMjc1N"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV8yNDcxM"
+              }
+            },
+            {
+              "_type": "UMLControlFlow",
+              "_id": "AAAAAAFRmxvd181MTExYWY2Y",
+              "_parent": {
+                "$ref": "AAAAAAFQWN0aXZpdHlfYTJlO"
+              },
+              "name": "[Procedure Finished]",
+              "source": {
+                "$ref": "AAAAAAFQWN0Tm9kZV9hMjc1N"
+              },
+              "target": {
+                "$ref": "AAAAAAFQWN0Tm9kZV82ZjllN"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

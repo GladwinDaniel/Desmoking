@@ -1,0 +1,15 @@
+================ Val_Performance (Wed Mar 25 06:31:57 2026) ================
+(epoch: 5, time: 59.591, data: 119.181) MSE: 104.229 SSIM: 0.296 PSNR: 27.953 
+(epoch: 10, time: 59.641, data: 119.282) MSE: 104.841 SSIM: 0.236 PSNR: 27.926 
+(epoch: 15, time: 56.909, data: 113.819) MSE: 104.361 SSIM: 0.227 PSNR: 27.947 
+(epoch: 20, time: 60.086, data: 120.171) MSE: 103.918 SSIM: 0.238 PSNR: 27.966 
+(epoch: 25, time: 59.800, data: 119.600) MSE: 104.179 SSIM: 0.243 PSNR: 27.954 
+(epoch: 30, time: 57.862, data: 115.723) MSE: 104.518 SSIM: 0.215 PSNR: 27.940 
+(epoch: 35, time: 60.081, data: 120.163) MSE: 104.343 SSIM: 0.222 PSNR: 27.947 
+(epoch: 40, time: 59.930, data: 119.860) MSE: 104.301 SSIM: 0.231 PSNR: 27.949 
+(epoch: 45, time: 57.749, data: 115.499) MSE: 104.768 SSIM: 0.211 PSNR: 27.929 
+(epoch: 50, time: 60.214, data: 120.428) MSE: 104.333 SSIM: 0.217 PSNR: 27.948 
+(epoch: 55, time: 60.190, data: 120.381) MSE: 104.411 SSIM: 0.224 PSNR: 27.945 
+(epoch: 60, time: 59.910, data: 119.819) MSE: 104.143 SSIM: 0.218 PSNR: 27.956 
+(epoch: 65, time: 57.975, data: 115.951) MSE: 104.353 SSIM: 0.227 PSNR: 27.947 
+(epoch: 70, time: 59.984, data: 119.968) MSE: 104.065 SSIM: 0.224 PSNR: 27.959 

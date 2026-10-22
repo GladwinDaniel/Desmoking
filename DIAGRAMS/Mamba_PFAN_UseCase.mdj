@@ -1,0 +1,435 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAFUHJvalVDXzgzMjNmM",
+  "name": "Mamba-PFAN Use Case Model",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFTW9kVUNfNjdlYWQxZ",
+      "_parent": {
+        "$ref": "AAAAAAFUHJvalVDXzgzMjNmM"
+      },
+      "name": "Use Case Model",
+      "ownedElements": [
+        {
+          "_type": "UMLUseCaseDiagram",
+          "_id": "AAAAAAFRGlhZ1VDX2Y3ZGYxM",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "Mamba-PFAN Use Case Diagram",
+          "visible": true,
+          "defaultDiagram": true,
+          "ownedViews": []
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAFQWN0U3VyZ19hNmUwN",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "Laparoscopic Surgeon"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAFQWN0QUlfNTVjN2MxY",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "Intraoperative Inference Engine"
+        },
+        {
+          "_type": "UMLActor",
+          "_id": "AAAAAAFQWN0UmVzXzU1ZmUyM",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "Clinical AI Researcher"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfMWUxMDE5M2Q4M",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC1: Capture Laparoscopic Video Stream"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfZjM2NzNlZDg2N",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC2: Preprocess Surgical Video Frames"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfNmNiNWE1NzUwN",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC3: Perform Real-Time DeSmoking Inference"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfMjllYTMyOWNhO",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC4: Extract Local Features via ConvNeXt (7x7 DW Conv)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfMGY2Nzk2NzA0N",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC5: Model Global Context via 2D-SSM (4-Way Cross-Scan)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfZmIxMDY0NDM2N",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC6: Recalibrate Channel Dynamics (ChannelGate)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfOWZmOGNlYTE3M",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC7: Render Enhanced Smoke-Free Stream"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfNjI1ZWRlOTczO",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC8: Train Generator & Discriminator on Cholec80"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfYzM2ZmE0NWE4N",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC9: Optimize Hybrid Loss (GAN Loss + L1 Loss)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfODU0YjUxZjM1Z",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC10: Evaluate Desmoking Metrics (PSNR and SSIM)"
+        },
+        {
+          "_type": "UMLUseCase",
+          "_id": "AAAAAAFVUNfYTQyMDQ3ZjQwM",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kVUNfNjdlYWQxZ"
+          },
+          "name": "UC11: Export Lightweight Model Checkpoint (.pth)"
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfZDg2MmFmY",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0U3VyZ19hNmUwN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzRhZDEzMTVhN",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfZDg2MmFmY"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0U3VyZ19hNmUwN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2Y4NTM2NGVlY",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfZDg2MmFmY"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfMWUxMDE5M2Q4M"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfMjU3YmI3Z",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0U3VyZ19hNmUwN"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2I2N2M0YzQzO",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfMjU3YmI3Z"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0U3VyZ19hNmUwN"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2EzODRhODJjY",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfMjU3YmI3Z"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfOWZmOGNlYTE3M"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfOTQ0MjExO",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzE1OTNkMWU4Z",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfOTQ0MjExO"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2M5YjFjMWY0O",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfOTQ0MjExO"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfMWUxMDE5M2Q4M"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfNGYyYmMwM",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2RlMmIyOGNmO",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfNGYyYmMwM"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2ExMDM2YWFhM",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfNGYyYmMwM"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfZjM2NzNlZDg2N"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfZTUzYzAzZ",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzNiNTNjOWIzO",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfZTUzYzAzZ"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2Q3NzhiZTI2O",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfZTUzYzAzZ"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfYjMyMGVhY",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2FlZmFkZWJlY",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfYjMyMGVhY"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0QUlfNTVjN2MxY"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2U0NWE5Njk5M",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfYjMyMGVhY"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfOWZmOGNlYTE3M"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfMGE0NzM2Y",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzcwN2Q1NGM1M",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfMGE0NzM2Y"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kX2ViN2RkZjFhM",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfMGE0NzM2Y"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfNjI1ZWRlOTczO"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfYzMyYmQ5M",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzY3ZTc2OTk0Z",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfYzMyYmQ5M"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzIzZmI1N2FmO",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfYzMyYmQ5M"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfODU0YjUxZjM1Z"
+            }
+          }
+        },
+        {
+          "_type": "UMLAssociation",
+          "_id": "AAAAAAFQXNzb2NfNTA1OThkM",
+          "_parent": {
+            "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+          },
+          "end1": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzBiM2NjNzAwZ",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfNTA1OThkM"
+            },
+            "reference": {
+              "$ref": "AAAAAAFQWN0UmVzXzU1ZmUyM"
+            }
+          },
+          "end2": {
+            "_type": "UMLAssociationEnd",
+            "_id": "AAAAAAFRW5kXzkxODkxODEwO",
+            "_parent": {
+              "$ref": "AAAAAAFQXNzb2NfNTA1OThkM"
+            },
+            "reference": {
+              "$ref": "AAAAAAFVUNfYTQyMDQ3ZjQwM"
+            }
+          }
+        },
+        {
+          "_type": "UMLInclude",
+          "_id": "AAAAAAFSW5jX2Q3MDA0ZGE4O",
+          "_parent": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "source": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "target": {
+            "$ref": "AAAAAAFVUNfMjllYTMyOWNhO"
+          }
+        },
+        {
+          "_type": "UMLInclude",
+          "_id": "AAAAAAFSW5jXzMxZjJiNTkzZ",
+          "_parent": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "source": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "target": {
+            "$ref": "AAAAAAFVUNfMGY2Nzk2NzA0N"
+          }
+        },
+        {
+          "_type": "UMLInclude",
+          "_id": "AAAAAAFSW5jX2FkNGE2MDU1M",
+          "_parent": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "source": {
+            "$ref": "AAAAAAFVUNfNmNiNWE1NzUwN"
+          },
+          "target": {
+            "$ref": "AAAAAAFVUNfZmIxMDY0NDM2N"
+          }
+        },
+        {
+          "_type": "UMLInclude",
+          "_id": "AAAAAAFSW5jX2Y0NGYwZjgyZ",
+          "_parent": {
+            "$ref": "AAAAAAFVUNfNjI1ZWRlOTczO"
+          },
+          "source": {
+            "$ref": "AAAAAAFVUNfNjI1ZWRlOTczO"
+          },
+          "target": {
+            "$ref": "AAAAAAFVUNfYzM2ZmE0NWE4N"
+          }
+        }
+      ]
+    }
+  ]
+}
