@@ -1,0 +1,58 @@
+{
+  "part": 2,
+  "modes_run": [
+    "horizontal_bidirectional",
+    "vertical_bidirectional"
+  ],
+  "timestamp_utc": "20261013T090703Z",
+  "per_mode_results": {
+    "horizontal_bidirectional": {
+      "checkpoint_exists": true,
+      "checkpoint_path": "/kaggle/working/mamba_pfan/checkpoints/mamba_scan_horizontal_bidirectional/latest_net_G.pth",
+      "loss_log": [],
+      "eval_metrics": {
+        "mse": {
+          "mean": 478.639917466247,
+          "std": 240.41917593337817
+        },
+        "psnr_db": {
+          "mean": 21.886857609025185,
+          "std": 2.2708214171945795
+        },
+        "ssim": {
+          "mean": 0.8468960535739326,
+          "std": 0.05249022781529588
+        },
+        "ciede2000": {
+          "mean": 7.170206218089872,
+          "std": 1.9464348575139756
+        }
+      },
+      "eval_num_images": 103
+    },
+    "vertical_bidirectional": {
+      "checkpoint_exists": true,
+      "checkpoint_path": "/kaggle/working/mamba_pfan/checkpoints/mamba_scan_vertical_bidirectional/latest_net_G.pth",
+      "loss_log": [],
+      "eval_metrics": {
+        "mse": {
+          "mean": 377.25364304823387,
+          "std": 198.88325147640603
+        },
+        "psnr_db": {
+          "mean": 22.902078195739723,
+          "std": 2.161345337114168
+        },
+        "ssim": {
+          "mean": 0.8468837946882894,
+          "std": 0.05035214960349511
+        },
+        "ciede2000": {
+          "mean": 6.447610419930764,
+          "std": 1.3792093601312783
+        }
+      },
+      "eval_num_images": 103
+    }
+  }
+}

@@ -1,0 +1,6 @@
+MambaPFAN Test Results
+======================
+Number of test images: 5
+Average PSNR: 11.9583 dB
+Average SSIM: 0.2722
+Average MSE:  4764.0845

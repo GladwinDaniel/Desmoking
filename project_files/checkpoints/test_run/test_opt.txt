@@ -1,0 +1,49 @@
+----------------- Options ---------------
+             aspect_ratio: 1.0                           
+               batch_size: 6                             
+          checkpoints_dir: ./checkpoints                 
+                crop_size: 256                           
+                 dataroot: ./datasets/composite          	[default: None]
+             dataset_mode: aligned                       	[default: single]
+                    dd_in: 3                             
+                direction: AtoB                          
+          display_winsize: 256                           
+                embed_dim: 64                            
+                    epoch: latest                        
+                     eval: False                         
+                  gpu_ids: 0,1,2,3                       
+                init_gain: 0.02                          
+                init_type: normal                        
+                 input_nc: 3                             
+                  isTrain: False                         	[default: None]
+                load_iter: 0                             	[default: 0]
+                load_size: 256                           
+         max_dataset_size: inf                           
+                    model: test                          
+             model_suffix:                               
+               n_layers_D: 3                             
+                     name: test_run                      	[default: experiment_name]
+                      ndf: 64                            
+                     netD: basic                         
+                     netG: unet_256                      
+                      ngf: 64                            
+               no_dropout: False                         
+                  no_flip: False                         
+                     norm: batch                         
+                 num_test: 66                            
+              num_threads: 4                             
+                output_nc: 3                             
+                    phase: test                          
+               preprocess: resize_and_crop               
+              results_dir: ./results/                    
+           serial_batches: False                         
+                   suffix:                               
+                 syn_norm: False                         
+         token_projection: linear                        
+                 train_ps: 256                           
+                 use_norm: 1                             
+                use_wandb: False                         
+                  verbose: False                         
+       wandb_project_name: CycleGAN-and-pix2pix          
+                 win_size: 8                             
+----------------- End -------------------

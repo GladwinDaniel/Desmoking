@@ -1,0 +1,33 @@
+{
+  "part": 3,
+  "modes_run": [
+    "four_way"
+  ],
+  "timestamp_utc": "20261012T211430Z",
+  "per_mode_results": {
+    "four_way": {
+      "checkpoint_exists": true,
+      "checkpoint_path": "/kaggle/working/mamba_pfan/checkpoints/mamba_scan_four_way/latest_net_G.pth",
+      "loss_log": [],
+      "eval_metrics": {
+        "mse": {
+          "mean": 248.50940830267746,
+          "std": 115.00431514776912
+        },
+        "psnr_db": {
+          "mean": 24.582328697707197,
+          "std": 1.8597485050394993
+        },
+        "ssim": {
+          "mean": 0.8684583942737824,
+          "std": 0.03759558542536356
+        },
+        "ciede2000": {
+          "mean": 5.453190178547091,
+          "std": 1.0808716627176524
+        }
+      },
+      "eval_num_images": 103
+    }
+  }
+}

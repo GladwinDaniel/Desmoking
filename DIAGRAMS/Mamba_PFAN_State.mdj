@@ -1,0 +1,271 @@
+{
+  "_type": "Project",
+  "_id": "AAAAAAFUHJvalN0YXRlX2FjN",
+  "name": "Mamba-PFAN State Machine Model",
+  "ownedElements": [
+    {
+      "_type": "UMLModel",
+      "_id": "AAAAAAFTW9kU3RhdGVfODRkM",
+      "_parent": {
+        "$ref": "AAAAAAFUHJvalN0YXRlX2FjN"
+      },
+      "name": "State Model",
+      "ownedElements": [
+        {
+          "_type": "UMLStateMachine",
+          "_id": "AAAAAAFU3RhdGVtYWNoaW5lX",
+          "_parent": {
+            "$ref": "AAAAAAFTW9kU3RhdGVfODRkM"
+          },
+          "name": "System Lifecycle State Machine",
+          "regions": [
+            {
+              "_type": "UMLRegion",
+              "_id": "AAAAAAFUmVnaW9uXzRjYWNmN",
+              "_parent": {
+                "$ref": "AAAAAAFU3RhdGVtYWNoaW5lX"
+              },
+              "name": "MainRegion",
+              "ownedElements": [
+                {
+                  "_type": "UMLStatechartDiagram",
+                  "_id": "AAAAAAFRGlhZ1N0YXRlX2E2N",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Mamba-PFAN Operational State Diagram",
+                  "visible": true,
+                  "defaultDiagram": true,
+                  "ownedViews": []
+                }
+              ],
+              "vertices": [
+                {
+                  "_type": "UMLPseudostate",
+                  "_id": "AAAAAAFU3RhdGVfNDZmOTZkY",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "InitialState",
+                  "kind": "initial"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfODc4M2ExM",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Standby / Idle"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfZTI1OWJlZ",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Stream Calibration & GPU Check"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfZTg2NjM2N",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Real-Time 2D-SSM Desmoking Active"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfOTNkZmVlO",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Adversarial GAN Training Mode"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfYmVlMzA5Y",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Low Latency / Frame Skip Mode"
+                },
+                {
+                  "_type": "UMLState",
+                  "_id": "AAAAAAFU3RhdGVfNDA0Yzg2Y",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "Video Feed Error / Fail-safe"
+                },
+                {
+                  "_type": "UMLFinalState",
+                  "_id": "AAAAAAFU3RhdGVfZWEzMDFmN",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "System Shutdown"
+                }
+              ],
+              "transitions": [
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfZGE1YjVjO",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "power_on()",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfNDZmOTZkY"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfY2Q1ZjVkM",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "connect_camera_feed()",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfZTI1OWJlZ"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfOTdiZTNmN",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "gpu_ready & stream_locked",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfZTI1OWJlZ"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfZTg2NjM2N"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfNzYwMmM1N",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "fps_drop < 30fps",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfZTg2NjM2N"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfYmVlMzA5Y"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfOTJlMmI4N",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "latency_recovered",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfYmVlMzA5Y"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfZTg2NjM2N"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfNzkwNGZkY",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "stream_lost / gpu_oom",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfZTg2NjM2N"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfNDA0Yzg2Y"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfYWE2ZDJkY",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "reset_stream()",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfNDA0Yzg2Y"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfNDI5NDZhO",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "start_training_cycle(Cholec80)",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfOTNkZmVlO"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfZGJhODM1Z",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "epochs_completed / save_checkpoint",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfOTNkZmVlO"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfYzVjMmI2Y",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "stop_stream()",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfZTg2NjM2N"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  }
+                },
+                {
+                  "_type": "UMLTransition",
+                  "_id": "AAAAAAFVHJhbnNfMWNkNjg3M",
+                  "_parent": {
+                    "$ref": "AAAAAAFUmVnaW9uXzRjYWNmN"
+                  },
+                  "name": "system_shutdown()",
+                  "source": {
+                    "$ref": "AAAAAAFU3RhdGVfODc4M2ExM"
+                  },
+                  "target": {
+                    "$ref": "AAAAAAFU3RhdGVfZWEzMDFmN"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

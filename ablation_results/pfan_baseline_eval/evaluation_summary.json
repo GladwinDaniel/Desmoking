@@ -1,0 +1,25 @@
+{
+  "model": "pfan",
+  "scan_mode": "four_way",
+  "checkpoint": "E:\\Projects\\DeSmoking\\pfan_Final\\latest_net_G.pth",
+  "test_dir": "E:\\Projects\\DeSmoking\\project_files\\datasets\\composite\\test",
+  "num_images": 103,
+  "metrics": {
+    "mse": {
+      "mean": 129.03763074165025,
+      "std": 58.503645060398334
+    },
+    "psnr_db": {
+      "mean": 27.392140857799482,
+      "std": 1.753415413993058
+    },
+    "ssim": {
+      "mean": 0.9159184691499594,
+      "std": 0.028513104171579835
+    },
+    "ciede2000": {
+      "mean": 3.73888393976156,
+      "std": 0.7294485974763296
+    }
+  }
+}

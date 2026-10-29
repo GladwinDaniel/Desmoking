@@ -1,0 +1,5 @@
+Scan Mode,Scanning Mechanism,Images,PSNR (dB),PSNR Std,SSIM,SSIM Std,CIEDE2000,CIEDE2000 Std,MSE,MSE Std
+horizontal_forward,Horizontal (1-way Forward),103,22.30,2.16,0.8508,0.0510,6.76,1.67,430.84,210.49
+horizontal_bidirectional,Horizontal (2-way Bidirectional),103,21.89,2.27,0.8469,0.0525,7.17,1.95,478.64,240.42
+vertical_bidirectional,Vertical (2-way Bidirectional),103,22.90,2.16,0.8469,0.0504,6.45,1.38,377.25,198.88
+four_way,Four-Way Cross-Scan (4-way Full),103,24.58,1.86,0.8685,0.0376,5.45,1.08,248.51,115.00
