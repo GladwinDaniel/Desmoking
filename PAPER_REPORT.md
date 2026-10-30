@@ -63,7 +63,7 @@ This verified comparison is scientifically unassailable and directly aligned wit
 
 ## 4. Scan-Direction Ablation Study (Cholec80 Dataset, N=103)
 
-To validate the necessity of 2D multi-directional scanning over simpler 1D sequential scans, we systematically trained and evaluated four directional variants under identical training parameters ($N_{epochs}=50, \text{batch}=4, \text{lr}=2\times 10^{-4}$):
+To validate the necessity of 2D multi-directional scanning over simpler 1D sequential scans, we systematically trained and evaluated four directional variants under identical 50-epoch training parameters ($N_{epochs}=50, \text{batch}=4, \text{lr}=2\times 10^{-4}$). The separate four-way configuration was subsequently trained for 200 epochs for the final benchmark:
 
 | Ablation Configuration | Scan Directions | PSNR (dB) ↑ | SSIM ↑ | CIEDE2000 ↓ | MSE ↓ |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -85,31 +85,31 @@ To validate the necessity of 2D multi-directional scanning over simpler 1D seque
 
 Both models were evaluated on the complete test set of 103 frames from Cholec80 under standardized metric computation:
 
-| Metric | Baseline PFAN *(200 Epochs)* | Mamba-PFAN *(50 Epochs, 4-Way)* | Comparison Analysis |
+| Metric | Baseline PFAN *(200 Epochs)* | Mamba-PFAN *(200 Epochs, 4-Way)* | Comparison Analysis |
 | :--- | :---: | :---: | :--- |
 | **Generator Parameters** | 629,421 (0.629 M) | **387,917 (0.388 M)** | **38.4% parameter reduction (1.62× lighter)** |
-| **Training Budget** | 200 epochs | **50 epochs** | **4× fewer training epochs** |
-| **SSIM** ↑ | 0.9159 ± 0.0285 | **0.8685 ± 0.0376** | High structural fidelity (competitive) |
-| **PSNR (dB)** ↑ | 27.39 ± 1.75 | **24.58 ± 1.86** | -2.81 dB (driven by illumination offset) |
-| **MSE** ↓ | 129.04 ± 58.50 | **248.51 ± 115.00** | Pixel-level convergence difference |
-| **CIEDE2000** ↓ | 3.74 ± 0.73 | **5.45 ± 1.08** | Low-frequency color calibration drift |
+| **Training Budget** | 200 epochs | **200 epochs** | Matched training duration |
+| **SSIM** up | 0.9159 +/- 0.0285 | **0.8829 +/- 0.0339** | **-0.0330; modest structural-quality trade-off** |
+| **PSNR (dB)** up | 27.39 +/- 1.75 | **25.71 +/- 1.81** | **-1.68 dB** |
+| **MSE** down | 129.04 +/- 58.50 | **190.85 +/- 88.01** | Higher pixel error for Mamba-PFAN |
+| **CIEDE2000** down | 3.74 +/- 0.73 | **4.93 +/- 1.04** | Higher color error for Mamba-PFAN |
 
 ---
 
 ## 6. Understanding the MSE & CIEDE2000 Trade-off (The LAT vs. Mamba Dynamic)
 
-Examiners often ask why Mamba-PFAN exhibits higher MSE and CIEDE2000 than the 200-epoch baseline:
+The matched 200-epoch comparison shows that Mamba-PFAN still exhibits higher MSE and CIEDE2000 than the PFAN evaluation:
 
 1. **The Base Paper's Own Ablation Findings**:
    The original PFAN paper evaluated removing LAT blocks:
    > *"The model without LAT Blocks achieves a visually similar desmoking effect to the Ground Truth (GT); however, the color appears dull and exhibits noticeable distortion... The higher CIEDE2000 value indicates insufficient low-frequency feature extraction."*
 2. **Frequency Role Decomposition**:
    - Global attention (LAT) functions as a low-frequency color and global illumination calibrator.
-   - Replacing LAT with Mamba SSM provides superior structural preservation at low parameter cost, but introduces a slight global luminance calibration shift.
+   - Replacing LAT with Mamba SSM is intended to retain useful structural information at lower parameter cost, but the current result still has a global luminance calibration gap.
 3. **Sensitivity of MSE/PSNR vs. Robustness of SSIM**:
    - MSE and PSNR measure raw squared Euclidean distances across pixel channels: $\sum (R_1 - R_2)^2$.
-   - A uniform luminance offset of just 5–8 grayscale levels heavily penalizes MSE, even when anatomical edges, tissue contours, and instrument boundaries are perfectly preserved (as evidenced by Mamba's **0.8685 SSIM**).
-4. **Convergence Curve**: Baseline PFAN underwent **200 epochs** of L1 pixel loss minimization; Mamba-PFAN was evaluated at **only 50 epochs**. Extended training allows L1 loss to continue closing the raw pixel intensity gap.
+   - The final Mamba-PFAN result reaches **0.8829 SSIM**, but remains below the PFAN evaluation.
+4. **Convergence Curve**: Both final models were evaluated after 200 epochs. Mamba-PFAN improves substantially over its 50-epoch result, but does not eliminate the remaining quality gap.
 
 ---
 
@@ -117,7 +117,7 @@ Examiners often ask why Mamba-PFAN exhibits higher MSE and CIEDE2000 than the 20
 
 ### Q1: "Why is your MSE higher than the baseline paper?"
 **Answer:**  
-*"There are two reasons: training budget and frequency feature allocation. First, the baseline was trained for 200 full epochs, whereas Mamba-PFAN was trained for 50 epochs. Second, as documented in the base PFAN paper's own ablation study on the LAT block, global attention primarily governs low-frequency color and brightness recalibration. Mamba SSM preserves fine anatomical structures exceptionally well (0.8685 SSIM), but exhibits a minor global luminance calibration offset (CIEDE2000 5.45 vs 3.74), which disproportionately affects raw squared-error metrics like MSE without compromising perceptual de-smoking quality."*
+*"At a matched 200-epoch budget, the remaining gap should be described as an accuracy-efficiency trade-off, not attributed solely to computation. PFAN reaches 0.9159 SSIM and Mamba-PFAN reaches 0.8829 SSIM while using 38.4% fewer parameters. The lower Mamba result may reflect capacity, optimization, and frequency-calibration differences that require controlled experiments to separate."*
 
 ### Q2: "Did you claim 6.7× lighter? The base paper says PFAN has 629K parameters."
 **Answer:**  
@@ -125,7 +125,7 @@ Examiners often ask why Mamba-PFAN exhibits higher MSE and CIEDE2000 than the 20
 
 ### Q3: "What does the 4-way ablation prove?"
 **Answer:**  
-*"It proves that surgical smoke cannot be modeled by simple 1D directional sweeps. Due to vertical smoke plume dynamics in laparoscopy, vertical bidirectional scanning achieves +1.01 dB higher PSNR than horizontal scanning. Integrating all four directions through cross-scanning achieves 24.58 dB PSNR and 0.8685 SSIM, yielding a 42.3% MSE reduction over unidirectional scanning."*
+*"It proves that surgical smoke cannot be modeled by simple 1D directional sweeps. Due to vertical smoke plume dynamics in laparoscopy, vertical bidirectional scanning achieves +1.01 dB higher PSNR than horizontal scanning. Integrating all four directions through cross-scanning achieves 24.58 dB PSNR and 0.8685 SSIM in the 50-epoch ablation, yielding a 42.3% MSE reduction over unidirectional scanning."*
 
 ---
 

@@ -50,7 +50,7 @@ PROJECT_REVIEW_SHOWCASE/
 1. Open [`01_IEEE_Paper_and_Slides/Project_Review_Presentation.pptx`](file:///e:/Projects/DeSmoking/PROJECT_REVIEW_SHOWCASE/01_IEEE_Paper_and_Slides/Project_Review_Presentation.pptx).
 2. Show the IEEE Conference Paper: [`01_IEEE_Paper_and_Slides/Mamba_PFAN_IEEE_Conference_Paper.pdf`](file:///e:/Projects/DeSmoking/PROJECT_REVIEW_SHOWCASE/01_IEEE_Paper_and_Slides/Mamba_PFAN_IEEE_Conference_Paper.pdf).
 3. **Key Talking Point**:
-   > *"Existing Vision Transformers for laparoscopic smoke removal carry 26M to 132M parameters and quadratic complexity $\mathcal{O}(N^2)$, causing severe latency (>100 ms) that prevents live surgical video deployment. We propose Mamba-PFAN, which introduces 2D Selective State Space Models with linear $\mathcal{O}(N)$ complexity to achieve real-time 67 FPS inference with only 387.9K parameters."*
+   > *"Existing Vision Transformers for laparoscopic smoke removal carry 26M to 132M parameters and quadratic complexity $\mathcal{O}(N^2)$, causing severe latency (>100 ms) that prevents live surgical video deployment. We propose Mamba-PFAN, which introduces 2D Selective State Space Models with linear $\mathcal{O}(N)$ complexity with only 387.9K parameters; real-time FPS remains to be measured on target hardware."*
 
 ### Step 2: Show the Architecture & Software Design
 1. Open [`02_Architecture_and_System_Diagrams/Mamba_PFAN_Generator_Architecture.png`](file:///e:/Projects/DeSmoking/PROJECT_REVIEW_SHOWCASE/02_Architecture_and_System_Diagrams/Mamba_PFAN_Generator_Architecture.png).
@@ -71,14 +71,14 @@ PROJECT_REVIEW_SHOWCASE/
 2. Explain the **Scanning Direction Matrix**:
    - *1-Way Forward (22.30 dB)* leaves vertical streaking artifacts.
    - *Vertical 2-Way (22.90 dB)* outperforms Horizontal 2-Way (21.89 dB) because surgical cautery smoke naturally billows **upward** due to thermal buoyancy in $CO_2$ pneumoperitoneum.
-   - *4-Way Cross-Scan (24.58 dB, 0.8685 SSIM)* achieves a **+2.28 dB PSNR boost and 42.3% MSE reduction**, completely eliminating directional haze residual.
+   - *4-Way Cross-Scan (24.58 dB, 0.8685 SSIM at 50 epochs)* achieves a **+2.28 dB PSNR boost and 42.3% MSE reduction** over the one-way ablation. The final 200-epoch model reaches **25.71 dB PSNR and 0.8829 SSIM**.
 
 ---
 
 ## 🛡️ Quick Viva Defense Cheat-Sheet
 
-* **Q: "Why does baseline PFAN have higher PSNR (27.39 dB) than Mamba-PFAN (24.58 dB)?"**
-  * **Answer**: *"Baseline PFAN was trained for 200 epochs, while Mamba-PFAN achieved 0.8685 SSIM in only 50 epochs. In the base PFAN paper's own ablation study, removing the low-frequency attention block caused a slight global illumination offset without hurting structural correctness. Because MSE calculates raw Euclidean pixel squared errors, even an imperceptible uniform illumination shift penalizes MSE/PSNR. In exchange, Mamba-PFAN reduces parameters by 38.4% (from 629K to 387.9K) and increases frame rate by 52% (from 44 FPS to 67 FPS), easily clearing the 60 FPS live surgical camera threshold."*
+* **Q: "Why does baseline PFAN have higher PSNR (27.39 dB) than Mamba-PFAN (25.71 dB)?"**
+  * **Answer**: *"At a matched 200-epoch budget, PFAN reaches 27.39 dB PSNR and 0.9159 SSIM, while Mamba-PFAN reaches 25.71 dB PSNR and 0.8829 SSIM. Mamba-PFAN is therefore lower in absolute reconstruction quality, but it uses 38.4% fewer generator parameters and has linear theoretical scan complexity. We present this as an accuracy-efficiency trade-off, not as proof that lower SSIM is caused only by computational cost. Hardware FPS and latency still require measurement."*
 
 * **Q: "Why didn't you use a bigger Transformer like Restormer or Dehamer?"**
-  * **Answer**: *"Restormer has 26M parameters and Dehamer has 132M parameters. In an operating room, video towers run at 60 FPS. 100M-parameter models run at <10 FPS with over 100 ms latency, which breaks surgical hand-eye coordination and risks accidental vessel laceration. Mamba-PFAN is designed specifically for edge clinical feasibility."*
+  * **Answer**: *"Restormer has 26M parameters and Dehamer has 132M parameters, while Mamba-PFAN has 387,917. This makes Mamba-PFAN a promising efficiency-oriented alternative, but latency, memory, and FPS must be measured on identical target hardware before making clinical deployment claims."*

@@ -11,7 +11,7 @@ Laparoscopic surgery relies heavily on pristine visual feedback from endoscopic 
 
 To overcome these constraints, we propose **Mamba-PFAN**, a lightweight hybrid CNN-State Space Model architecture that substitutes computationally intensive axial attention with **2D Selective State Space Models (Mamba SSM)**. Operating with linear computational complexity $\mathcal{O}(N)$, Mamba-PFAN introduces a **Four-Way Cross-Selective Scanning (4-Way CSS)** mechanism that bidirectionally aggregates spatial context across both horizontal and vertical axes, eliminating the directional blind spots inherent to 1D sequence models. 
 
-Evaluated on 103 unseen laparoscopic test pairs from the Cholec80 benchmark, Mamba-PFAN attains **24.58 dB PSNR** and **0.8685 SSIM** while compressing generator parameters to **387,917 (0.388M)**—a **38.4% parameter reduction (1.62× lighter)** compared to the 629K-parameter baseline PFAN. Furthermore, a systematic ablation study on scanning trajectories proves that 4-way cross-scanning achieves a **+2.28 dB PSNR gain** and a **42.3% MSE reduction** over unidirectional scanning, with vertical scanning effectively modeling the vertical dispersal dynamics of laparoscopic smoke plumes. Mamba-PFAN establishes a compelling balance of high structural restoration fidelity, ultra-low parameter count, and real-time inference viability for intraoperative computer vision systems.
+Evaluated on 103 unseen laparoscopic test pairs from the Cholec80 benchmark, Mamba-PFAN attains **25.71 dB PSNR** and **0.8829 SSIM** after 200 epochs while compressing generator parameters to **387,917 (0.388M)**—a **38.4% parameter reduction (1.62× lighter)** compared to the 629K-parameter baseline PFAN. Furthermore, a systematic ablation study on scanning trajectories proves that 4-way cross-scanning achieves a **+2.28 dB PSNR gain** and a **42.3% MSE reduction** over unidirectional scanning, with vertical scanning effectively modeling the vertical dispersal dynamics of laparoscopic smoke plumes. Mamba-PFAN establishes a compelling balance of high structural restoration fidelity, ultra-low parameter count, and an accuracy-efficiency trade-off for intraoperative computer vision systems; hardware latency and FPS remain to be measured.
 
 **Index Terms**—Laparoscopy, Surgical Smoke Removal, Visual Mamba, State Space Models (SSM), Frequency-Aware Learning, Medical Image Enhancement, Minimally Invasive Surgery.
 
@@ -179,9 +179,9 @@ Model performance was evaluated across four standard image restoration metrics:
 | Model Architecture        | Epochs | Parameters | Complexity  | PSNR (dB) ↑ | SSIM ↑ | CIEDE00 ↓ |
 +---------------------------+--------+------------+-------------+-------------+--------+-----------+
 | Baseline PFAN (Ref.)      |  200   |  0.629 M   |  O(N^1.5)   |    27.39    | 0.9159 |   3.74    |
-| Mamba-PFAN (Proposed)     |   50   |  0.388 M   |  O(N)       |    24.58    | 0.8685 |   5.45    |
+| Mamba-PFAN (Proposed)     |  200   |  0.388 M   |  O(N)       |    25.71    | 0.8829 |   4.93    |
 +---------------------------+--------+------------+-------------+-------------+--------+-----------+
-| Delta (Mamba vs. Base)    |  -75%  |   -38.4%   | Linear O(N) |   -2.81 dB  | -0.047 |   +1.71   |
+| Delta (Mamba vs. Base)    |   0%   |   -38.4%   | Linear O(N) |   -1.68 dB  | -0.033 |   +1.19   |
 +---------------------------------------------------------------------------------------------------+
 ```
 
@@ -195,21 +195,21 @@ Table I summarizes the comparative evaluation on the 103 test frames:
 | **Pix2Pix (ResNet-9)** [9] | Paired cGAN | 11.38 M | $\mathcal{O}(N)$ | 29.87 | 0.8417 | 6.70 |
 | **Baseline PFAN (Published)** [14] | Hybrid CNN–ViT | 629,421 (0.629 M) | $\mathcal{O}(N^{1.5})$ | 30.49 | 0.9061 | 5.50 |
 | **Baseline PFAN (Eval Split, 200 ep)** | Hybrid CNN–ViT | 629,421 (0.629 M) | $\mathcal{O}(N^{1.5})$ | 27.39 ± 1.75 | 0.9159 ± 0.028 | 3.74 ± 0.73 |
-| **Mamba-PFAN (Ours, 50 ep)** | **Visual SSM** | **387,917 (0.388 M)** | $\mathbf{\mathcal{O}(N)}$ | **24.58 ± 1.86** | **0.8685 ± 0.038** | **5.45 ± 1.08** |
+| **Mamba-PFAN (Ours, 200 ep)** | **Visual SSM** | **387,917 (0.388 M)** | $\mathbf{\mathcal{O}(N)}$ | **25.71 +/- 1.81** | **0.8829 +/- 0.034** | **4.93 +/- 1.04** |
 
 Table I compares Mamba-PFAN against published physical priors (DCP [6]), deep GAN architectures (CycleGAN [10], Pix2Pix [9]), and the state-of-the-art hybrid PFAN [14] on 103 unseen Cholec80 test pairs. 
 
 Prior-based DCP exhibits catastrophic failure (CIEDE2000 of 35.99, SSIM 0.5528) because point-source endoscope illumination violates uniform ambient scattering assumptions, causing severe tissue darkening. Standard GANs like Pix2Pix and CycleGAN achieve higher PSNR but require 11.38M to 54.4M parameters, exceeding the thermal and memory constraints of embedded surgical carts. 
 
-Against baseline PFAN (629K parameters), Mamba-PFAN establishes the **lowest parameter count in published surgical desmoking literature (387,917 / 0.388M)**—a **38.4% parameter reduction**—while operating with strictly linear $\mathcal{O}(N)$ complexity. It achieves **0.8685 SSIM** in only **50 epochs** (1/4th of the 200 epochs used by PFAN), proving rapid structural convergence. Representative qualitative restorations are illustrated in Fig. 2.
+Against baseline PFAN (629K parameters), Mamba-PFAN establishes the **lowest parameter count among the models listed in this comparison (387,917 / 0.388M)**—a **38.4% parameter reduction**—while operating with strictly linear $\mathcal{O}(N)$ complexity. After 200 epochs, it achieves **0.8829 SSIM** while using 38.4% fewer parameters than PFAN. This supports an accuracy-efficiency trade-off; it does not establish higher absolute quality than PFAN. Representative qualitative restorations are illustrated in Fig. 2.
 
 ### B. Analytical Discussion of the Frequency & Color Trade-off
 Examiners frequently query why Mamba-PFAN incurs higher MSE and CIEDE2000 relative to 200-epoch PFAN. In PFAN's own ablation study [14], the authors demonstrated that ablating the LAT attention block caused visual color distortion and higher CIEDE2000 values, establishing that **axial attention primarily functions as a low-frequency global illumination and color normalizer**. 
 
 Specifically:
-1. **Structural Preservation**: Mamba SSM captures long-range spatial context with high structural fidelity (**0.8685 SSIM**), ensuring that vascular networks and tool boundaries are cleanly recovered without blurring.
-2. **Illumination Calibration**: At 50 epochs, Mamba-PFAN exhibits a minor global luminance calibration shift relative to ground truth (CIEDE2000 of 5.45 vs. 3.74). Because MSE calculates squared pixel differences $\sum (I_{pred} - I_{gt})^2$, even an imperceptible uniform brightness offset heavily penalizes MSE and PSNR without degrading perceived anatomical structure or surgical usability.
-3. **Training Budget**: Baseline PFAN underwent 200 epochs of continuous pixel convergence, whereas Mamba-PFAN achieves competitive restoration in only 50 epochs.
+1. **Structural Preservation**: Mamba SSM captures long-range spatial context with useful structural fidelity (**0.8829 SSIM**), ensuring that vascular networks and tool boundaries are cleanly recovered without blurring.
+2. **Illumination Calibration**: Even at 200 epochs, Mamba-PFAN exhibits a global luminance calibration shift relative to ground truth (CIEDE2000 of 4.93 vs. 3.74). Because MSE calculates squared pixel differences $\sum (I_{pred} - I_{gt})^2$, brightness offsets can penalize MSE and PSNR; the current study does not establish that they have no effect on perceived usability.
+3. **Training Budget**: Both final models were evaluated after 200 epochs; Mamba-PFAN improves substantially over its 50-epoch result but remains below PFAN in PSNR and SSIM.
 
 ---
 
@@ -246,16 +246,16 @@ For intraoperative clinical translation, algorithms must maintain low latency ($
 
 | Model | Generator Params | Theoretical Complexity | VRAM Allocation | Inference Latency |
 | :--- | :---: | :---: | :---: | :---: |
-| **PFAN (Axial Attention)** | 629,421 | $\mathcal{O}(N \sqrt{N})$ | ~180 MB | 22.4 ms |
-| **Mamba-PFAN (Ours)** | **387,917** | $\mathbf{\mathcal{O}(N)}$ | **< 50 MB** | **14.8 ms (~67 FPS)** |
+| **PFAN (Axial Attention)** | 629,421 | $\mathcal{O}(N \sqrt{N})$ | Not measured in this study | Not measured in this study |
+| **Mamba-PFAN (Ours)** | **387,917** | $\mathbf{\mathcal{O}(N)}$ | Not measured in this study | Not measured in this study |
 
-Mamba-PFAN delivers a **38.4% parameter reduction** and operates well above real-time surgical camera thresholds (67 FPS vs. standard 30/60 FPS video feeds). Pure PyTorch tensor operations eliminate CUDA kernel compilation overhead, ensuring seamless deployment across edge GPU devices.
+Mamba-PFAN delivers a **38.4% parameter reduction** and has linear theoretical scan complexity. Actual FPS, latency, FLOPs, and memory should be measured on identical hardware before claiming real-time or edge deployment.
 
 ---
 
 ## VIII. Conclusion
 
-We have presented **Mamba-PFAN**, a lightweight hybrid architecture integrating 2D Selective State Space Models into progressive frequency-aware surgical image de-smoking. By substituting axial attention with Four-Way Cross-Selective Scanning, Mamba-PFAN achieves linear $\mathcal{O}(N)$ complexity and reduces generator parameters to **387,917 (38.4% compression)**. Extensive evaluation on the Cholec80 dataset demonstrates **24.58 dB PSNR** and **0.8685 SSIM**, with systematic ablation confirming that 4-way cross-scanning provides full 2D spatial context while effectively modeling thermal plume anisotropy. Mamba-PFAN represents a highly practical, parameter-efficient framework for real-time surgical vision enhancement.
+We have presented **Mamba-PFAN**, a lightweight hybrid architecture integrating 2D Selective State Space Models into progressive frequency-aware surgical image de-smoking. By substituting axial attention with Four-Way Cross-Selective Scanning, the final 200-epoch model achieves **25.71 dB PSNR** and **0.8829 SSIM** with 387,917 parameters, a 38.4% reduction from PFAN. The 50-epoch ablation confirms that 4-way cross-scanning improves over simpler trajectories. These results support a parameter-efficient accuracy-efficiency trade-off; real-time clinical suitability requires hardware benchmarking.
 
 ---
 

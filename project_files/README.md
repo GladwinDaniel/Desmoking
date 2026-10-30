@@ -3,9 +3,9 @@
 **Authors:** Gladwin Daniel P, Arun Kumaran, Srishreyan S  
 **Affiliation:** Department of Computer Science & Engineering, Vellore Institute of Technology (VIT), Chennai, India  
 
-A lightweight, high-efficiency hybrid CNN-Mamba architecture designed for real-time surgical laparoscopy smoke removal. 
+A lightweight, high-efficiency hybrid CNN-Mamba architecture designed for surgical laparoscopy smoke removal.
 
-Mamba-PFAN replaces heavy axial/self-attention mechanisms with **2D Selective State Space Models (Mamba SSM)**, providing linear complexity $\mathcal{O}(N)$ global context modeling while requiring only **0.388M parameters** (**38.4% parameter reduction / 1.62× lighter** than standard PFAN), enabling real-time deployment on clinical edge hardware.
+Mamba-PFAN replaces PFAN's axial-attention pathway with **2D Selective State Space Models (Mamba SSM)**, providing linear-complexity $\mathcal{O}(N)$ global context modeling with **0.388M parameters** (**38.4% fewer / 1.62x lighter** than PFAN). This supports an accuracy?efficiency study; real-time deployment requires hardware measurements that are not yet reported here.
 
 ---
 
@@ -15,10 +15,10 @@ Evaluated on **103 unseen laparoscopic test image pairs** from the Cholec80 surg
 
 | Model Architecture | Epochs | Parameters | Complexity | PSNR (dB) ↑ | SSIM ↑ | CIEDE2000 ↓ | MSE ↓ |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Mamba-PFAN (Ours, 4-Way)** | **50** | **0.388 M** | $\mathcal{O}(N)$ | **24.58 ± 1.86** | **0.8685 ± 0.038** | **5.45 ± 1.08** | **248.51 ± 115.00** |
-| Baseline PFAN (Published Ref.) | 200 | 0.629 M | $\mathcal{O}(N^{1.5})$ | 27.39 ± 1.75 | 0.9159 ± 0.028 | 3.74 ± 0.73 | 129.04 ± 58.50 |
+| **Mamba-PFAN (Ours, 4-Way)** | **200** | **0.388 M** | $\mathcal{O}(N)$ | **25.71 +/- 1.81** | **0.8829 +/- 0.034** | **4.93 +/- 1.04** | **190.85 +/- 88.01** |
+| Baseline PFAN (Local standardized evaluation) | 200 | 0.629 M | $\mathcal{O}(N^{1.5})$ | 27.39 +/- 1.75 | 0.9159 +/- 0.028 | 3.74 +/- 0.73 | 129.04 +/- 58.50 |
 
-> **Key Takeaway:** Under **1/4th the training budget (50 vs. 200 epochs)** and **38.4% fewer parameters**, Mamba-PFAN achieves **0.8685 SSIM** and **24.58 dB PSNR**, faithfully restoring delicate tissue contours, vascular networks, and metallic laparoscopic graspers with linear computational scaling.
+> **Key Takeaway:** At a matched 200-epoch budget, Mamba-PFAN uses 38.4% fewer parameters and improves substantially over its 50-epoch result, while PFAN remains higher in PSNR and SSIM. The result supports an accuracy-efficiency trade-off, not a claim of absolute quality superiority.
 
 ---
 
@@ -36,7 +36,7 @@ To evaluate the necessity of multi-directional state propagation in laparoscopic
 ### Architectural Insights:
 1. **Plume Anisotropy**: Vertical bidirectional scanning outperforms horizontal bidirectional scanning by **+1.01 dB PSNR**, confirming that laparoscopic electrocautery smoke tends to rise and disperse vertically in pneumoperitoneum cavity environments.
 2. **Full 2D Spatial Integration**: Four-way cross-scanning integrates both axes simultaneously, cutting MSE from `430.84` down to `248.51` (**-42.3% error reduction**) and reducing color difference (CIEDE2000) from `6.76` to `5.45`.
-3. **LAT vs. Mamba SSM Trade-Off**: Consistent with the original PFAN paper's frequency ablation findings, the global attention mechanism is responsible for low-frequency global illumination normalization. Mamba-PFAN preserves high-frequency structural boundaries exceptionally well (0.8685 SSIM), while training for 50 epochs incurs a slight low-frequency color calibration gap against the 200-epoch baseline.
+the 200-epoch result narrows
 
 ---
 
@@ -93,7 +93,7 @@ python run_scan_ablation.py \
     --dataroot /kaggle/input/desmoking-dataset \
     --checkpoints-dir /kaggle/working/checkpoints \
     --name mamba_scan \
-    --n-epochs 50 \
+--n-epochs 200
     --batch-size 4 \
     --gpu-ids 0 \
     --skip-existing
@@ -108,7 +108,7 @@ python run_scan_ablation.py \
 │   └── visual_comparisons/           # Side-by-side 6-column ablation figures
 ├── checkpoints/
 │   └── mamba_Final/
-│       ├── 50_net_G.pth              # 50-epoch Mamba generator weights (1.6 MB)
+200_net_G.pth
 │       └── latest_net_G.pth          # Latest generator checkpoint
 ├── data/                             # Aligned & unaligned dataset loaders
 ├── models/
